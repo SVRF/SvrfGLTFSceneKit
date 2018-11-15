@@ -4,10 +4,10 @@ Pod::Spec.new do |s|
   s.summary = "SvrfGLTF loader for SceneKit"
   s.homepage = "https://github.com/SVRF/SvrfGLTFSceneKit"
   s.license = "MIT"
-  s.author = "Svrf"
+  s.author = "SVRF"
   s.ios.deployment_target = "11.0"
   s.osx.deployment_target = "10.13"
-  s.source = { :git => "https://github.com/SVRF/SvrfGLTFSceneKit.git", :tag => "v#{s.version}" }
+  s.source = { :git => "https://github.com/SVRF/SvrfGLTFSceneKit.git", :tag => "#{s.version}" }
   s.source_files = "Source/**/*.swift"
   s.resources = "Source/**/*.shader"
   s.requires_arc = true
