@@ -1310,7 +1310,7 @@ public class GLTFUnarchiver {
         } else {
             let step = animations.count
             let dataLength = values.count / step
-            // Comment out to fix animations
+//             Comment out to fix animations
 //            guard dataLength == keyTimes.count else {
 //                throw GLTFUnarchiveError.DataInconsistent("loadWeightAnimationsSampler: data count mismatch: \(dataLength) != \(keyTimes.count)")
 //            }
