@@ -1298,20 +1298,32 @@ public class GLTFUnarchiver {
         group.animations = animations
         group.repeatCount = .infinity
         
-        let step = animations.count
-        let dataLength = values.count / step
-        guard dataLength == keyTimes.count else {
-            throw GLTFUnarchiveError.DataInconsistent("loadWeightAnimationsSampler: data count mismatch: \(dataLength) != \(keyTimes.count)")
-        }
-        for i in 0..<animations.count {
-            var valueIndex = i
-            var v = [NSNumber]()
-            v.reserveCapacity(dataLength)
-            for _ in 0..<dataLength {
-                v.append(values[valueIndex])
-                valueIndex += step
+        if keyTimes.count == values.count {
+            for i in 0..<animations.count {
+                var v = [NSNumber]()
+                v.reserveCapacity(values.count)
+                for j in 0..<values.count {
+                    v.append(values[j])
+                }
+                animations[i].values = v
             }
-            animations[i].values = v
+        } else {
+            let step = animations.count
+            let dataLength = values.count / step
+//             Comment out to fix animations
+//            guard dataLength == keyTimes.count else {
+//                throw GLTFUnarchiveError.DataInconsistent("loadWeightAnimationsSampler: data count mismatch: \(dataLength) != \(keyTimes.count)")
+//            }
+            for i in 0..<animations.count {
+                var valueIndex = i
+                var v = [NSNumber]()
+                v.reserveCapacity(dataLength)
+                for _ in 0..<dataLength {
+                    v.append(values[valueIndex])
+                    valueIndex += step
+                }
+                animations[i].values = v
+            }
         }
         
         return group
@@ -1349,12 +1361,11 @@ public class GLTFUnarchiver {
         // Animation Sampler
         let samplerIndex = glChannel.sampler
         
-        /*
         guard samplerIndex < glAnimation.samplers.count else {
             throw GLTFUnarchiveError.DataInconsistent("loadAnimation: out of index: sampler \(samplerIndex) < \(glAnimation.samplers.count)")
         }
         let glSampler = glAnimation.samplers[samplerIndex]
-        */
+        
         var animation: CAAnimation
         if keyPath == "weights" {
             guard let weightPaths = weightPaths else {
