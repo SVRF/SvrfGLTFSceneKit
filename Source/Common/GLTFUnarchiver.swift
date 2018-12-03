@@ -5,6 +5,7 @@
 //  Created by magicien on 2017/08/17.
 //  Copyright © 2017 DarkHorse. All rights reserved.
 //
+
 import SceneKit
 import SpriteKit
 import QuartzCore
@@ -13,6 +14,7 @@ import CoreGraphics
 let glbMagic = 0x46546C67 // "glTF"
 let chunkTypeJSON = 0x4E4F534A // "JSON"
 let chunkTypeBIN = 0x004E4942 // "BIN"
+
 public class GLTFUnarchiver {
     private var directoryPath: URL? = nil
     private var json: GLTFGlTF! = nil
@@ -37,7 +39,7 @@ public class GLTFUnarchiver {
     private var maxAnimationDuration: CFTimeInterval = 0.0
     
     #if !os(watchOS)
-    private var workingAnimationGroup: CAAnimationGroup! = nil
+        private var workingAnimationGroup: CAAnimationGroup! = nil
     #endif
     
     convenience public init(path: String, extensions: [String:Codable.Type]? = nil) throws {
@@ -127,7 +129,7 @@ public class GLTFUnarchiver {
         
         if let animations = self.json.animations {
             //if #available(OSX 10.13, *) {
-            // self.animationChannels = [[SCNAnimation?]?](repeating: nil, count: animations.count)
+               // self.animationChannels = [[SCNAnimation?]?](repeating: nil, count: animations.count)
             self.animationChannels = [[CAAnimation?]?](repeating: nil, count: animations.count)
             self.animationSamplers = [[CAAnimation?]?](repeating: nil, count: animations.count)
             //} else {
@@ -432,28 +434,28 @@ public class GLTFUnarchiver {
         }
         
         /*
-         print("==================================================")
-         print("semantic: \(semantic)")
-         print("vectorCount: \(vectorCount)")
-         print("usesFloatComponents: \(usesFloatComponents)")
-         print("componentsPerVector: \(componentsPerVector)")
-         print("bytesPerComponent: \(bytesPerComponent)")
-         print("dataOffset: \(dataOffset)")
-         print("dataStride: \(dataStride)")
-         print("bufferView.count: \(bufferView.count)")
-         print("padding: \(padding)")
-         print("dataOffset + dataStride * vectorCount - padding: \(dataOffset + dataStride * vectorCount - padding)")
-         print("==================================================")
-         */
+        print("==================================================")
+        print("semantic: \(semantic)")
+        print("vectorCount: \(vectorCount)")
+        print("usesFloatComponents: \(usesFloatComponents)")
+        print("componentsPerVector: \(componentsPerVector)")
+        print("bytesPerComponent: \(bytesPerComponent)")
+        print("dataOffset: \(dataOffset)")
+        print("dataStride: \(dataStride)")
+        print("bufferView.count: \(bufferView.count)")
+        print("padding: \(padding)")
+        print("dataOffset + dataStride * vectorCount - padding: \(dataOffset + dataStride * vectorCount - padding)")
+        print("==================================================")
+        */
         
         #if SEEMS_TO_HAVE_VALIDATE_VERTEX_ATTRIBUTE_BUG
-        // Metal validateVertexAttribute function seems to have a bug, so dateOffset must be 0.
-        bufferView = bufferView.subdata(in: dataOffset..<dataOffset + dataStride * vectorCount - padding)
-        
-        let geometrySource = SCNGeometrySource(data: bufferView, semantic: semantic, vectorCount: vectorCount, usesFloatComponents: usesFloatComponents, componentsPerVector: componentsPerVector, bytesPerComponent: bytesPerComponent, dataOffset: 0, dataStride: dataStride)
-        
+            // Metal validateVertexAttribute function seems to have a bug, so dateOffset must be 0.
+            bufferView = bufferView.subdata(in: dataOffset..<dataOffset + dataStride * vectorCount - padding)
+            
+            let geometrySource = SCNGeometrySource(data: bufferView, semantic: semantic, vectorCount: vectorCount, usesFloatComponents: usesFloatComponents, componentsPerVector: componentsPerVector, bytesPerComponent: bytesPerComponent, dataOffset: 0, dataStride: dataStride)
+            
         #else
-        let geometrySource = SCNGeometrySource(data: bufferView, semantic: semantic, vectorCount: vectorCount, usesFloatComponents: usesFloatComponents, componentsPerVector: componentsPerVector, bytesPerComponent: bytesPerComponent, dataOffset: dataOffset, dataStride: dataStride)
+            let geometrySource = SCNGeometrySource(data: bufferView, semantic: semantic, vectorCount: vectorCount, usesFloatComponents: usesFloatComponents, componentsPerVector: componentsPerVector, bytesPerComponent: bytesPerComponent, dataOffset: dataOffset, dataStride: dataStride)
         #endif
         
         self.accessors[index] = geometrySource
@@ -687,24 +689,24 @@ public class GLTFUnarchiver {
         }
         
         /*
-         guard let usesFloatComponents = usesFloatComponentsMap[glAccessor.componentType] else {
-         throw GLTFUnarchiveError.NotSupported("loadValueAccessor: user defined accessor.componentType is not supported")
-         }
-         if usesFloatComponents {
-         throw GLTFUnarchiveError.DataInconsistent("loadValueAccessor: not Float keyTime accessor")
-         }
-         
-         guard let componentsPerVector = componentsPerVectorMap[glAccessor.type] else {
-         throw GLTFUnarchiveError.NotSupported("loadValueAccessor: user defined accessor.type is not supported")
-         }
-         if componentsPerVector != 1 {
-         throw GLTFUnarchiveError.DataInconsistent("loadValueAccessor: accessor type must be SCALAR")
-         }
-         
-         guard let bytesPerComponent = bytesPerComponentMap[glAccessor.componentType] else {
-         throw GLTFUnarchiveError.NotSupported("loadValueAccessor: user defined accessor.componentType is not supported")
-         }
-         */
+        guard let usesFloatComponents = usesFloatComponentsMap[glAccessor.componentType] else {
+            throw GLTFUnarchiveError.NotSupported("loadValueAccessor: user defined accessor.componentType is not supported")
+        }
+        if usesFloatComponents {
+            throw GLTFUnarchiveError.DataInconsistent("loadValueAccessor: not Float keyTime accessor")
+        }
+        
+        guard let componentsPerVector = componentsPerVectorMap[glAccessor.type] else {
+            throw GLTFUnarchiveError.NotSupported("loadValueAccessor: user defined accessor.type is not supported")
+        }
+        if componentsPerVector != 1 {
+            throw GLTFUnarchiveError.DataInconsistent("loadValueAccessor: accessor type must be SCALAR")
+        }
+        
+        guard let bytesPerComponent = bytesPerComponentMap[glAccessor.componentType] else {
+            throw GLTFUnarchiveError.NotSupported("loadValueAccessor: user defined accessor.componentType is not supported")
+        }
+        */
         
         let dataOffset = glAccessor.byteOffset
         let bytesPerComponent = bytesPerComponentMap[glAccessor.componentType]!
@@ -712,19 +714,19 @@ public class GLTFUnarchiver {
         let dataStride = bytesPerComponent * componentsPerVector
         
         /*
-         var bufferView: Data
-         var dataStride: Int = bytesPerComponent
-         if let bufferViewIndex = glAccessor.bufferView {
-         let bv = try self.loadBufferView(index: bufferViewIndex)
-         bufferView = bv
-         if let ds = try self.getDataStride(ofBufferViewIndex: bufferViewIndex) {
-         dataStride = ds
-         }
-         } else {
-         let dataSize = dataStride * glAccessor.count
-         bufferView = Data(count: dataSize)
-         }
-         */
+        var bufferView: Data
+        var dataStride: Int = bytesPerComponent
+        if let bufferViewIndex = glAccessor.bufferView {
+            let bv = try self.loadBufferView(index: bufferViewIndex)
+            bufferView = bv
+            if let ds = try self.getDataStride(ofBufferViewIndex: bufferViewIndex) {
+                dataStride = ds
+            }
+        } else {
+            let dataSize = dataStride * glAccessor.count
+            bufferView = Data(count: dataSize)
+        }
+        */
         
         //let valueArray = self.createValueArray(of: glAccessor)
         if glAccessor.type == "SCALAR" {
@@ -1034,13 +1036,13 @@ public class GLTFUnarchiver {
             .surface: try! String(contentsOf: URL(fileURLWithPath: Bundle(for: GLTFUnarchiver.self).path(forResource: "GLTFShaderModifierSurface", ofType: "shader")!), encoding: String.Encoding.utf8)
         ]
         #if SEEMS_TO_HAVE_DOUBLESIDED_BUG
-        if material.isDoubleSided {
-            material.shaderModifiers = [
-                .surface: try! String(contentsOf: URL(fileURLWithPath: Bundle(for: GLTFUnarchiver.self).path(forResource: "GLTFShaderModifierSurface_doubleSidedWorkaround", ofType: "shader")!), encoding: String.Encoding.utf8)
-            ]
-        }
+            if material.isDoubleSided {
+                material.shaderModifiers = [
+                    .surface: try! String(contentsOf: URL(fileURLWithPath: Bundle(for: GLTFUnarchiver.self).path(forResource: "GLTFShaderModifierSurface_doubleSidedWorkaround", ofType: "shader")!), encoding: String.Encoding.utf8)
+                ]
+            }
         #endif
-        
+
         switch glMaterial.alphaMode {
         case "OPAQUE":
             material.blendMode = .replace
@@ -1102,21 +1104,21 @@ public class GLTFUnarchiver {
             //var normalSource: SCNGeometrySource?
             
             /*
-             for (attribute, accessorIndex) in primitive.attributes {
-             if let semantic = attributeMap[attribute] {
-             let accessor = try self.loadVertexAccessor(index: accessorIndex, semantic: semantic)
-             sources.append(accessor)
-             if semantic == .vertex {
-             vertexSource = accessor
-             } else if semantic == .normal {
-             normalSource = accessor
-             }
-             } else {
-             // user defined semantic
-             throw GLTFUnarchiveError.NotSupported("loadMesh: user defined semantic is not supported: " + attribute)
-             }
-             }
-             */
+            for (attribute, accessorIndex) in primitive.attributes {
+                if let semantic = attributeMap[attribute] {
+                    let accessor = try self.loadVertexAccessor(index: accessorIndex, semantic: semantic)
+                    sources.append(accessor)
+                    if semantic == .vertex {
+                        vertexSource = accessor
+                    } else if semantic == .normal {
+                        normalSource = accessor
+                    }
+                } else {
+                    // user defined semantic
+                    throw GLTFUnarchiveError.NotSupported("loadMesh: user defined semantic is not supported: " + attribute)
+                }
+            }
+ */
             var sources = try self.loadAttributes(primitive.attributes)
             let vertexSource = sources.first { $0.semantic == .vertex }
             var normalSource = sources.first { $0.semantic == .normal }
@@ -1158,13 +1160,11 @@ public class GLTFUnarchiver {
                     let target = targets[targetIndex]
                     let sources = try self.loadAttributes(target)
                     let geometry = SCNGeometry(sources: sources, elements: nil)
-                    
+
                     if let accessor = self.json.accessors?[target["POSITION"]!], let name = accessor.name {
-                        print("geometry name: \(name)")
                         geometry.name = name
                     }
-                    
-                    
+
                     morpher.targets.append(geometry)
                     let weightPath = "childNodes[0].childNodes[\(i)].morpher.weights[\(targetIndex)]"
                     weightPaths.append(weightPath)
@@ -1179,20 +1179,20 @@ public class GLTFUnarchiver {
         
         // TODO: set default weights
         /*
-         if let weights = glMesh.weights {
-         for i in 0..<weights.count {
-         print("keyPath: \(weightPaths[i])")
-         node.setValue(0.123, forKeyPath: weightPaths[i])
-         print("value: \(node.value(forKeyPath: weightPaths[i]))")
-         //print("v: \(node.childNodes[0].childNodes[0].morpher?.wefight(forTargetAt: i))")
-         
-         node.setValue(weights[i], forKeyPath: weightPaths[i])
-         }
-         
-         //node.setValue(0.234, forKeyPath: "childNodes[0].morpher.weights[")
-         //print("value: \(node.childNodes[0].morpher?.weight(forTargetAt: 0))")
-         }
-         */
+        if let weights = glMesh.weights {
+            for i in 0..<weights.count {
+                print("keyPath: \(weightPaths[i])")
+                node.setValue(0.123, forKeyPath: weightPaths[i])
+                print("value: \(node.value(forKeyPath: weightPaths[i]))")
+                //print("v: \(node.childNodes[0].childNodes[0].morpher?.wefight(forTargetAt: i))")
+                
+                node.setValue(weights[i], forKeyPath: weightPaths[i])
+            }
+            
+            //node.setValue(0.234, forKeyPath: "childNodes[0].morpher.weights[")
+            //print("value: \(node.childNodes[0].morpher?.weight(forTargetAt: 0))")
+        }
+        */
         //node.childNodes[0].morpher?.setWeight(1.0, forTargetAt: 0)
         //node.childNodes[0].morpher?.setWeight(1.0, forTargetAt: 1)
         
@@ -1236,7 +1236,7 @@ public class GLTFUnarchiver {
         let (keyTimes, duration) = try self.loadKeyTimeAccessor(index: glSampler.input)
         //let timingFunctions =
         let values = try self.loadValueAccessor(index: glSampler.output, flipW: flipW)
-        
+            
         animation.keyTimes = keyTimes
         animation.values = values
         animation.repeatCount = .infinity
@@ -1298,32 +1298,20 @@ public class GLTFUnarchiver {
         group.animations = animations
         group.repeatCount = .infinity
         
-        if keyTimes.count == values.count {
-            for i in 0..<animations.count {
-                var v = [NSNumber]()
-                v.reserveCapacity(values.count)
-                for j in 0..<values.count {
-                    v.append(values[j])
-                }
-                animations[i].values = v
+        let step = animations.count
+        let dataLength = values.count / step
+        guard dataLength == keyTimes.count else {
+            throw GLTFUnarchiveError.DataInconsistent("loadWeightAnimationsSampler: data count mismatch: \(dataLength) != \(keyTimes.count)")
+        }
+        for i in 0..<animations.count {
+            var valueIndex = i
+            var v = [NSNumber]()
+            v.reserveCapacity(dataLength)
+            for _ in 0..<dataLength {
+                v.append(values[valueIndex])
+                valueIndex += step
             }
-        } else {
-            let step = animations.count
-            let dataLength = values.count / step
-            // Comment out to fix animations
-//            guard dataLength == keyTimes.count else {
-//                throw GLTFUnarchiveError.DataInconsistent("loadWeightAnimationsSampler: data count mismatch: \(dataLength) != \(keyTimes.count)")
-//            }
-            for i in 0..<animations.count {
-                var valueIndex = i
-                var v = [NSNumber]()
-                v.reserveCapacity(dataLength)
-                for _ in 0..<dataLength {
-                    v.append(values[valueIndex])
-                    valueIndex += step
-                }
-                animations[i].values = v
-            }
+            animations[i].values = v
         }
         
         return group
@@ -1361,10 +1349,12 @@ public class GLTFUnarchiver {
         // Animation Sampler
         let samplerIndex = glChannel.sampler
         
+        /*
         guard samplerIndex < glAnimation.samplers.count else {
             throw GLTFUnarchiveError.DataInconsistent("loadAnimation: out of index: sampler \(samplerIndex) < \(glAnimation.samplers.count)")
         }
         let glSampler = glAnimation.samplers[samplerIndex]
+        */
         var animation: CAAnimation
         if keyPath == "weights" {
             guard let weightPaths = weightPaths else {
@@ -1548,18 +1538,18 @@ public class GLTFUnarchiver {
                 print("boneIndices dataStride: \(boneIndices.dataStride)")
                 
                 #if SEEMS_TO_HAVE_SKINNER_VECTOR_TYPE_BUG
-                // This code doesn't solve the problem.
-                #if false
-                if _joints[0].dataStride == 8 {
-                    let device = MTLCreateSystemDefaultDevice()!
-                    let numComponents = _joints[0].vectorCount * _joints[0].componentsPerVector
-                    _joints[0].data.withUnsafeBytes { (ptr: UnsafePointer<UInt16>) in
-                        let buffer = device.makeBuffer(bytes: ptr, length: 2 * numComponents, options: [])!
-                        let source = SCNGeometrySource(buffer: buffer, vertexFormat: .ushort4, semantic: .boneIndices, vertexCount: _joints[0].vectorCount, dataOffset: 0, dataStride: _joints[0].dataStride)
-                        boneIndices = source
-                    }
-                }
-                #endif
+                    // This code doesn't solve the problem.
+                    #if false
+                        if _joints[0].dataStride == 8 {
+                            let device = MTLCreateSystemDefaultDevice()!
+                            let numComponents = _joints[0].vectorCount * _joints[0].componentsPerVector
+                            _joints[0].data.withUnsafeBytes { (ptr: UnsafePointer<UInt16>) in
+                                let buffer = device.makeBuffer(bytes: ptr, length: 2 * numComponents, options: [])!
+                                let source = SCNGeometrySource(buffer: buffer, vertexFormat: .ushort4, semantic: .boneIndices, vertexCount: _joints[0].vectorCount, dataOffset: 0, dataStride: _joints[0].dataStride)
+                                boneIndices = source
+                            }
+                        }
+                    #endif
                 #endif
                 
                 let skinner = SCNSkinner(baseGeometry: baseGeometry, bones: joints, boneInverseBindTransforms: boneInverseBindTransforms, boneWeights: boneWeights, boneIndices: boneIndices)
@@ -1569,18 +1559,18 @@ public class GLTFUnarchiver {
             }
         }
         /*
-         guard let _boneWeights = boneWeights else {
-         throw GLTFUnarchiveError.DataInconsistent("loadSkin: WEIGHTS_0 is not defined")
-         }
-         guard let _boneIndices = boneIndices else {
-         throw GLTFUnarchiveError.DataInconsistent("loadSkin: JOINTS_0 is not defined")
-         }
-         
-         let skinner = SCNSkinner(baseGeometry: baseGeometry, bones: joints, boneInverseBindTransforms: boneInverseBindTransforms, boneWeights: _boneWeights, boneIndices: _boneIndices)
-         skinner.skeleton = skeleton
-         skeleton?.skinner = skinner
-         
-         self.skins[index] = skinner
+        guard let _boneWeights = boneWeights else {
+            throw GLTFUnarchiveError.DataInconsistent("loadSkin: WEIGHTS_0 is not defined")
+        }
+        guard let _boneIndices = boneIndices else {
+            throw GLTFUnarchiveError.DataInconsistent("loadSkin: JOINTS_0 is not defined")
+        }
+        
+        let skinner = SCNSkinner(baseGeometry: baseGeometry, bones: joints, boneInverseBindTransforms: boneInverseBindTransforms, boneWeights: _boneWeights, boneIndices: _boneIndices)
+        skinner.skeleton = skeleton
+        skeleton?.skinner = skinner
+        
+        self.skins[index] = skinner
          */
         guard let skinner = _skinner else {
             throw GLTFUnarchiveError.DataInconsistent("loadSkin: skinner is not defined")
@@ -1711,3 +1701,4 @@ public class GLTFUnarchiver {
         }
     }
 }
+
