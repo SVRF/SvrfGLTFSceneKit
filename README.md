@@ -1,5 +1,5 @@
 # SvrfGLTFSceneKit
-glTF loader for SceneKit
+glTF loader for SceneKit forked from [magicien/GLTFSceneKit](https://github.com/magicien/GLTFSceneKit) to continue developing this great library.
 
 ![ScreenShot](https://raw.githubusercontent.com/svrf/SvrfGLTFSceneKit/master/screenshot.png)
 
