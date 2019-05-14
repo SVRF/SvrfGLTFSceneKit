@@ -167,13 +167,29 @@ public class GLTFUnarchiver {
         }
     }
     
+    // getBase64Kind retrieves the MIME-type of the given base64 string
+    private func getBase64MIMEType(from str: String) -> String? {
+        guard str.starts(with: "data:") else { return nil }
+
+        let mark = ";base64,"
+        guard str.contains(mark) else { return nil }
+
+        // remove the leading data string, split by on the mark
+        var tmp = str
+        tmp.removeFirst("data:".count)
+        guard let kind = tmp.components(separatedBy: mark).first else { return nil }
+
+        return kind
+    }
+
+    // getBase64Str returns the data portion of a given base64 string
     private func getBase64Str(from str: String) -> String? {
         guard str.starts(with: "data:") else { return nil }
-        
+
         let mark = ";base64,"
         guard str.contains(mark) else { return nil }
         guard let base64Str = str.components(separatedBy: mark).last else { return nil }
-        
+
         return base64Str
     }
     
@@ -791,12 +807,27 @@ public class GLTFUnarchiver {
                 guard let data = Data(base64Encoded: base64Str) else {
                     throw GLTFUnarchiveError.Unknown("loadImage: cannot convert the base64 string to Data")
                 }
-                image = try loadImageData(from: data)
+                guard let mimeType = self.getBase64MIMEType(from: uri) else {
+                    throw GLTFUnarchiveError.Unknown("loadImage: cannot get MIME-type from base64 string")
+                }
+
+                if mimeType == "video/mp4" {
+                    // save data to file and load from that uri
+                    let tempDirectory = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+                    let filename = ProcessInfo().globallyUniqueString.appending(".mp4")
+                    let url = tempDirectory.appendingPathComponent(filename)
+                    try data.write(to: url)
+                    image = try loadImageFile(from: url)
+                } else {
+                    image = try loadImageData(from: data)
+                }
             } else {
                 let url = URL(fileURLWithPath: uri, relativeTo: self.directoryPath)
                 image = try loadImageFile(from: url)
             }
         } else if let bufferViewIndex = glImage.bufferView {
+            // TODO(artem): figure out how to determine if this is a video from the bufferview.
+            // Might have to sniff it? Currently just assumes it's a still image.
             let bufferView = try self.loadBufferView(index: bufferViewIndex)
             image = try loadImageData(from: bufferView)
         }
@@ -881,9 +912,13 @@ public class GLTFUnarchiver {
         guard let sourceIndex = glTexture.source else {
             throw GLTFUnarchiveError.NotSupported("loadTexture: texture without source is not supported")
         }
+
         let image = try self.loadImage(index: sourceIndex)
-        
-        let texture = SCNMaterialProperty(contents: image)
+        guard let contents = image.contents else {
+            throw GLTFUnarchiveError.Unknown("loadTexture: texture contents did not load")
+        }
+
+        let texture = SCNMaterialProperty(contents: contents)
         
         // TODO: retain glTexture.name somewhere
         
@@ -994,9 +1029,23 @@ public class GLTFUnarchiver {
                 } else {
                     // Fallback on earlier versions
                     if let image = material.metalness.contents as? Image {
-                        let (metalness, roughness) = try getMetallicRoughnessTexture(from: image)
-                        material.metalness.contents = metalness
-                        material.roughness.contents = roughness
+                        guard image.contents != nil else {
+                            throw GLTFUnarchiveError.Unknown("loadMaterial: cannot get contents of Image")
+                        }
+                        
+                        switch image {
+                        case .Video:
+                            // NOTE: This could be done, but it would require splitting the video channels on-device.
+                            throw GLTFUnarchiveError.Unknown("loadMaterial: only Photos can be materials")
+                        case .Photo:
+                            #if os(macOS)
+                            let (metalness, roughness) = try getMetallicRoughnessTexture(from: image.contents as! NSImage)
+                            #else
+                            let (metalness, roughness) = try getMetallicRoughnessTexture(from: image.contents as! UIImage)
+                            #endif
+                            material.metalness.contents = metalness
+                            material.roughness.contents = roughness
+                        }
                     }
                 }
                 

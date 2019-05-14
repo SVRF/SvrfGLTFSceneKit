@@ -10,6 +10,7 @@
 import SceneKit
 import SpriteKit
 import CoreGraphics
+import AVKit
 
 func add(_ v0: SCNVector3, _ v1: SCNVector3) -> SCNVector3 {
     return SCNVector3(v0.x + v1.x, v0.y + v1.y, v0.z + v1.z)
@@ -185,32 +186,32 @@ func createMatrix4(_ matrix: [Float]) -> SCNMatrix4 {
         m41: m[12], m42: m[13], m43: m[14], m44: m[15])
 }
 
+func guessMIMEType(from url: URL) -> String? {
+    guard let ext = url.absoluteString.components(separatedBy: ".").last else { return nil }
+    switch ext {
+    case "mp4":
+        return "video/mp4"
+    case "png":
+        return "image/png"
+    case "jpg":
+        return "image/jpg"
+    default:
+        return nil
+    }
+}
+
 func loadImageFile(from url: URL) throws -> Image? {
+    guard let mimeType = guessMIMEType(from: url) else { return nil }
+    if mimeType == "video/mp4" {
+        return Image.Video(url)
+    }
+    
     let data = try Data.init(contentsOf: url)
     return try loadImageData(from: data)
 }
 
-//func loadImageData(from data: Data) throws -> CGImage? {
 func loadImageData(from data: Data) throws -> Image? {
-    #if SEEMS_TO_HAVE_PNG_LOADING_BUG
-        let magic: UInt64 = data.subdata(in: 0..<8).withUnsafeBytes { $0.pointee }
-        if magic == 0x0A1A0A0D474E5089 {
-            // PNG file
-            let cgDataProvider = CGDataProvider(data: data as CFData)
-            guard let cgImage = CGImage(pngDataProviderSource: cgDataProvider!, decode: nil, shouldInterpolate: false, intent: CGColorRenderingIntent.defaultIntent) else {
-                print("loadImage error: cannot create CGImage")
-                return nil
-            }
-            #if os(macOS)
-                let imageSize = CGSize(width: cgImage.width, height: cgImage.height)
-                return NSImage(cgImage: cgImage, size: imageSize)
-            #else
-                // FIXME: this workaround doesn't work for iOS...
-                return UIImage(cgImage: cgImage)
-            #endif
-        }
-    #endif
-    return Image(data: data)
+    return Image.Photo(data)
 }
 
 /*

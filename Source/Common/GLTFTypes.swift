@@ -101,11 +101,48 @@ let keyPathMap: [String: String] = [
     "scale": "scale"
 ]
 
-#if os(macOS)
-    typealias Image = NSImage
-#elseif os(iOS) || os(tvOS) || os(watchOS)
-    typealias Image = UIImage
-#endif
+import AVKit
+
+// TODO(artem): rename this to something that can encompass both
+// images and video, but that isn't "texture" (that's a glTF thing)
+enum Image {
+    case Photo(Data)
+    case Video(URL)
+}
+
+extension Image {
+    var contents: Any? {
+        switch self {
+        case .Photo(let data):
+            #if SEEMS_TO_HAVE_PNG_LOADING_BUG
+            let magic: UInt64 = data.subdata(in: 0..<8).withUnsafeBytes { $0.pointee }
+            if magic == 0x0A1A0A0D474E5089 {
+                // PNG file
+                let cgDataProvider = CGDataProvider(data: data as CFData)
+                guard let cgImage = CGImage(pngDataProviderSource: cgDataProvider!, decode: nil, shouldInterpolate: false, intent: CGColorRenderingIntent.defaultIntent) else {
+                    print("loadImage error: cannot create CGImage")
+                    return nil
+                }
+
+                #if os(macOS)
+                    let imageSize = CGSize(width: cgImage.width, height: cgImage.height)
+                    return NSImage(cgImage: cgImage, size: imageSize)
+                #else
+                    // FIXME: this workaround doesn't work for iOS...
+                    return UIImage(cgImage: cgImage)
+                #endif
+            }
+            #endif
+            #if os(macOS)
+                return NSImage(data: data)
+            #elseif os(iOS) || os(tvOS) || os(watchOS)
+                return UIImage(data: data)
+            #endif
+        case .Video(let url):
+            return AVPlayer(url: url)
+        }
+    }
+}
 
 public protocol GLTFCodable: Codable {
     func didLoad(by object: Any, unarchiver: GLTFUnarchiver)
