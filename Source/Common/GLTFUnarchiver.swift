@@ -1674,12 +1674,17 @@ public class GLTFUnarchiver {
     }
     
     func loadSceneOverlay(scnView: SCNView) -> SKScene? {
-        print("Loading overlay scene - overlay model \(overlayModel)")
         guard let sceneOverlayModel = overlayModel else {
             return nil
         }
 
         let skScene = SKScene(size: scnView.frame.size)
+        if let image = sceneOverlayModel.image {
+            let texture = SKTexture(imageNamed: image)
+            let imageNode = SKSpriteNode(texture: texture)
+            imageNode.position = CGPoint(x: 250, y: 250)
+            skScene.addChild(imageNode)
+        }
 
         return skScene
     }

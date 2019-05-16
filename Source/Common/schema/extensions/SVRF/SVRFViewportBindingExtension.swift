@@ -14,11 +14,20 @@ protocol SVRFSceneOverlayLoader {
 }
 
 struct SVRFViewportBindingExtension: GLTFCodable {
+    
+    struct SVRFViewportBinding: Codable {
+        let image: String?
+    }
+    let data: SVRFViewportBinding?
+
+    enum CodingKeys: String, CodingKey {
+        case data = "SVRF_viewport"
+    }
 
     func didLoad(by object: Any, unarchiver: GLTFUnarchiver) {
-        print("********************** Loaded extension with object: \(object)")
-
-        unarchiver.setOverlayModel(SceneOverlayModel())
+        let model = SceneOverlayModel()
+        model.image = data?.image
+        unarchiver.setOverlayModel(model)
     }
     
 }
