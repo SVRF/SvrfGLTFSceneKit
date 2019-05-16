@@ -22,6 +22,7 @@ public class GLTFUnarchiver {
     
     private var scene: SCNScene?
     private var scenes: [SCNScene?] = []
+    private var overlayModel: SceneOverlayModel?
     private var cameras: [SCNCamera?] = []
     private var nodes: [SCNNode?] = []
     private var skins: [SCNSkinner?] = []
@@ -1672,6 +1673,17 @@ public class GLTFUnarchiver {
         return try self.loadScene(index: 0)
     }
     
+    func loadSceneOverlay(scnView: SCNView) -> SKScene? {
+        print("Loading overlay scene - overlay model \(overlayModel)")
+        guard let sceneOverlayModel = overlayModel else {
+            return nil
+        }
+
+        let skScene = SKScene(size: scnView.frame.size)
+
+        return skScene
+    }
+    
     private func loadScene(index: Int) throws -> SCNScene {
         guard index < self.scenes.count else {
             throw GLTFUnarchiveError.DataInconsistent("loadScene: out of index: \(index) < \(self.scenes.count)")
@@ -1713,3 +1725,8 @@ public class GLTFUnarchiver {
     }
 }
 
+extension GLTFUnarchiver: SVRFSceneOverlayLoader {
+    func setOverlayModel(_ model: SceneOverlayModel) {
+        overlayModel = model
+    }
+}

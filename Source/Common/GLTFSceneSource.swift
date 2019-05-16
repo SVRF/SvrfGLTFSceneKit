@@ -7,6 +7,7 @@
 //
 
 import SceneKit
+import SpriteKit
 
 @objcMembers
 public class GLTFSceneSource : SCNSceneSource {
@@ -66,6 +67,10 @@ public class GLTFSceneSource : SCNSceneSource {
         #endif
     }
     
+    public func sceneOverlay(view: SCNView) -> SKScene? {
+        return self.loader.loadSceneOverlay(scnView: view)
+    }
+
     /*
     public func cameraNodes() -> [SCNNode] {
         var cameraNodes = [SCNNode]()

@@ -6,3 +6,20 @@
 //
 
 import Foundation
+import SceneKit
+import SpriteKit
+
+protocol SVRFSceneOverlayLoader {
+    func setOverlayModel(_ model: SceneOverlayModel)
+}
+
+struct SVRFViewportBindingExtension: GLTFCodable {
+
+    func didLoad(by object: Any, unarchiver: GLTFUnarchiver) {
+        print("********************** Loaded extension with object: \(object)")
+
+        unarchiver.setOverlayModel(SceneOverlayModel())
+    }
+    
+}
+
