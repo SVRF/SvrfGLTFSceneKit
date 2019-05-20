@@ -1682,7 +1682,22 @@ public class GLTFUnarchiver {
         if let image = sceneOverlayModel.image {
             let texture = SKTexture(imageNamed: image)
             let imageNode = SKSpriteNode(texture: texture)
-            imageNode.position = CGPoint(x: 200, y: 250)
+
+            var x: CGFloat
+            var y: CGFloat
+            switch sceneOverlayModel.halign ?? .center {
+            case .center: x = scnView.frame.size.width/2
+            case .left: x = texture.size().width/2
+            case .right: x = scnView.frame.size.width - (texture.size().width/2)
+            }
+
+            switch sceneOverlayModel.valign ?? .center {
+            case .center: y = scnView.frame.size.height/2
+            case .bottom: y = texture.size().height/2
+            case .top: y = scnView.frame.size.height - (texture.size().height/2)
+            }
+
+            imageNode.position = CGPoint(x: x, y: y)
             skScene.addChild(imageNode)
         }
 

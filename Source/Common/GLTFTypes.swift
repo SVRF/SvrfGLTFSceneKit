@@ -134,4 +134,6 @@ extension GLTFPropertyProtocol {
 // Provides information for rendering the SKSceneOverlay (provided by the SVRFViewportBindingExtension)
 public class SceneOverlayModel {
     var image: String?
+    var halign: SVRFHorizontalAlignment?
+    var valign: SVRFVerticalAlignment?
 }
