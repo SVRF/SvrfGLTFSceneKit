@@ -1680,21 +1680,30 @@ public class GLTFUnarchiver {
 
         let skScene = SKScene(size: scnView.frame.size)
         if let image = sceneOverlayModel.image {
+            let imageNode: SKSpriteNode
+            let nodeSize: CGSize
+
+            if (image.hasSuffix(".gif")) {
+                imageNode = SKSpriteNode(gifNamed: image)
+                nodeSize = imageNode.gifSize!
+            } else {
             let texture = SKTexture(imageNamed: image)
-            let imageNode = SKSpriteNode(texture: texture)
+                imageNode = SKSpriteNode(texture: texture)
+                nodeSize = texture.size()
+            }
 
             var x: CGFloat
             var y: CGFloat
             switch sceneOverlayModel.halign ?? .center {
             case .center: x = scnView.frame.size.width/2
-            case .left: x = texture.size().width/2
-            case .right: x = scnView.frame.size.width - (texture.size().width/2)
+            case .left: x = nodeSize.width/2
+            case .right: x = scnView.frame.size.width - (nodeSize.width/2)
             }
 
             switch sceneOverlayModel.valign ?? .center {
             case .center: y = scnView.frame.size.height/2
-            case .bottom: y = texture.size().height/2
-            case .top: y = scnView.frame.size.height - (texture.size().height/2)
+            case .bottom: y = nodeSize.height/2
+            case .top: y = scnView.frame.size.height - (nodeSize.height/2)
             }
 
             imageNode.position = CGPoint(x: x, y: y)
