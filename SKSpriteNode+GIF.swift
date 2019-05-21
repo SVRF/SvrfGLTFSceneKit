@@ -42,7 +42,13 @@ extension SKSpriteNode {
         }
         
         if let textures = SKSpriteNode.gifWithData(imageData) {
+            guard textures.count > 0 else {
+                print("GIF: No frames found in file")
+                return
+            }
+            
             SKSpriteNode._gifSize = textures[0].size()
+            self.size = gifSize!
 
             let action = SKAction.repeatForever(SKAction.animate(with: textures, timePerFrame: 0.1))
             self.run(action)
