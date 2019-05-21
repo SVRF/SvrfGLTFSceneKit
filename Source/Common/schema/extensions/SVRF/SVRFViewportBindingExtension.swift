@@ -29,11 +29,13 @@ struct SVRFViewportBindingExtension: GLTFCodable {
     
     struct SVRFViewportBinding: Codable {
         let image: String?
+        let images: [String]?
         let valign: SVRFVerticalAlignment?
         let halign: SVRFHorizontalAlignment?
 
         private enum CodingKeys: String, CodingKey {
             case image
+            case images
             case valign
             case halign
         }
@@ -47,9 +49,15 @@ struct SVRFViewportBindingExtension: GLTFCodable {
 
     func didLoad(by object: Any, unarchiver: GLTFUnarchiver) {
         let model = SceneOverlayModel()
-        model.image = data?.image
-        model.halign = data?.halign
-        model.valign = data?.valign
+        guard let data = data else {
+            print("SVRF Viewport Extension: No data provided")
+            return
+        }
+
+        model.images = data.images != nil ? data.images : [data.image ?? ""]
+        
+        model.halign = data.halign
+        model.valign = data.valign
         unarchiver.setOverlayModel(model)
     }
     

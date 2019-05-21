@@ -1679,17 +1679,23 @@ public class GLTFUnarchiver {
         }
 
         let skScene = SKScene(size: scnView.frame.size)
-        if let image = sceneOverlayModel.image {
+        if let images = sceneOverlayModel.images {
             let imageNode: SKSpriteNode
             let nodeSize: CGSize
 
-            if (image.hasSuffix(".gif")) {
-                imageNode = SKSpriteNode(gifNamed: image)
-                nodeSize = imageNode.gifSize!
+            if (images.count == 1) {
+                let image = images[0]
+                if (image.hasSuffix(".gif")) {
+                    imageNode = SKSpriteNode(gifNamed: image)
+                    nodeSize = imageNode.gifSize!
+                } else {
+                    let texture = SKTexture(imageNamed: image)
+                    imageNode = SKSpriteNode(texture: texture)
+                    nodeSize = texture.size()
+                }
             } else {
-            let texture = SKTexture(imageNamed: image)
-                imageNode = SKSpriteNode(texture: texture)
-                nodeSize = texture.size()
+                imageNode = SKSpriteNode(images: images)
+                nodeSize = CGSize(width: 500, height: 500)
             }
 
             var x: CGFloat
