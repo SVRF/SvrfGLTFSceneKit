@@ -139,7 +139,14 @@ extension Image {
                 return UIImage(data: data)
             #endif
         case .Video(let url):
-            return AVPlayer(url: url)
+            let player = AVPlayer(url: url)
+            player.play()
+            
+            if let error = player.error {
+                print("Error playing url:", error)
+            }
+            
+            return player
         }
     }
 }

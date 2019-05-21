@@ -987,6 +987,10 @@ public class GLTFUnarchiver {
         let material = SCNMaterial()
         self.materials[index] = material
         
+        if let name = glMaterial.name {
+            material.name = name
+        }
+        
         material.setValue(Float(1.0), forKey: "baseColorFactorR")
         material.setValue(Float(1.0), forKey: "baseColorFactorG")
         material.setValue(Float(1.0), forKey: "baseColorFactorB")
@@ -1118,7 +1122,7 @@ public class GLTFUnarchiver {
                 sources.append(accessor)
             } else {
                 // user defined semantic
-                throw GLTFUnarchiveError.NotSupported("loadMesh: user defined semantic is not supported: " + attribute)
+                throw GLTFUnarchiveError.NotSupported("loadAttributes: user defined semantic is not supported: " + attribute)
             }
         }
         return sources
