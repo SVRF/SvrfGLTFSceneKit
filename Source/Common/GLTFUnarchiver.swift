@@ -1679,23 +1679,23 @@ public class GLTFUnarchiver {
         }
 
         let skScene = SKScene(size: scnView.frame.size)
-        if let images = sceneOverlayModel.images {
+        if let imageRefs = sceneOverlayModel.images {
             let imageNode: SKSpriteNode
             let nodeSize: CGSize
 
             if (images.count == 1) {
-                let image = images[0]
-                if (image.hasSuffix(".gif")) {
-                    imageNode = SKSpriteNode(gifNamed: image)
-                    nodeSize = imageNode.gifSize!
-                } else {
-                    let texture = SKTexture(imageNamed: image)
+                let image = self.images[imageRefs[0]]!
+//                if (image.hasSuffix(".gif")) {
+//                    imageNode = SKSpriteNode(gifNamed: image)
+//                    nodeSize = imageNode.gifSize!
+//                } else {
+                    let texture = SKTexture(image: image)
                     imageNode = SKSpriteNode(texture: texture)
                     nodeSize = texture.size()
-                }
+//                }
             } else {
-                imageNode = SKSpriteNode(images: images)
-                nodeSize = CGSize(width: 500, height: 500)
+                imageNode = SKSpriteNode(images: imageRefs.compactMap { return images[$0] })
+                nodeSize = imageNode.size
             }
 
             var x: CGFloat
@@ -1761,7 +1761,12 @@ public class GLTFUnarchiver {
 }
 
 extension GLTFUnarchiver: SVRFSceneOverlayLoader {
-    func setOverlayModel(_ model: SceneOverlayModel) {
+    func setOverlayModel(_ model: SceneOverlayModel) throws {
         overlayModel = model
+        if let images = overlayModel?.images {
+            for imageRef in images {
+                try loadImage(index: imageRef)
+            }
+        }
     }
 }

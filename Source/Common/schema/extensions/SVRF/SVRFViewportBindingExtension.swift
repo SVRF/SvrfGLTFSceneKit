@@ -10,7 +10,7 @@ import SceneKit
 import SpriteKit
 
 protocol SVRFSceneOverlayLoader {
-    func setOverlayModel(_ model: SceneOverlayModel)
+    func setOverlayModel(_ model: SceneOverlayModel) throws
 }
 
 enum SVRFVerticalAlignment: String, Codable {
@@ -28,8 +28,8 @@ enum SVRFHorizontalAlignment: String, Codable {
 struct SVRFViewportBindingExtension: GLTFCodable {
     
     struct SVRFViewportBinding: Codable {
-        let image: String?
-        let images: [String]?
+        let image: Int?
+        let images: [Int]?
         let valign: SVRFVerticalAlignment?
         let halign: SVRFHorizontalAlignment?
 
@@ -54,11 +54,16 @@ struct SVRFViewportBindingExtension: GLTFCodable {
             return
         }
 
-        model.images = data.images != nil ? data.images : [data.image ?? ""]
+        model.images = data.images != nil ? data.images : [data.image ?? 0]
         
         model.halign = data.halign
         model.valign = data.valign
-        unarchiver.setOverlayModel(model)
+        do {
+            try unarchiver.setOverlayModel(model)
+        } catch {
+            print("Error loading overlay model: \(error)")
+        }
+        
     }
     
 }
