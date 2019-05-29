@@ -1685,14 +1685,9 @@ public class GLTFUnarchiver {
 
             if (images.count == 1) {
                 let image = self.images[imageRefs[0]]!
-//                if (image.hasSuffix(".gif")) {
-//                    imageNode = SKSpriteNode(gifNamed: image)
-//                    nodeSize = imageNode.gifSize!
-//                } else {
-                    let texture = SKTexture(image: image)
-                    imageNode = SKSpriteNode(texture: texture)
-                    nodeSize = texture.size()
-//                }
+                let texture = SKTexture(image: image)
+                imageNode = SKSpriteNode(texture: texture)
+                nodeSize = texture.size()
             } else {
                 imageNode = SKSpriteNode(images: imageRefs.compactMap { return images[$0] })
                 nodeSize = imageNode.size
