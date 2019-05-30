@@ -37,6 +37,50 @@ public class GLTFSceneSource : SCNSceneSource {
         }
     }
     
+    public static func load(remoteURL: URL,
+                            onSuccess success: @escaping (_ sceneSource: GLTFSceneSource) -> Void,
+                            onFailure failure: Optional<(_ error: Error) -> Void> = nil,
+                            extensions: [String:Codable.Type]? = nil) -> URLSessionDataTask {
+        
+        struct UnexpectedResponseError: Error {
+            enum ErrorType {
+                case unexpectedResponseType
+                case noData
+                indirect case status(Int)
+            }
+            
+            let errorType: ErrorType
+        }
+
+        let dataTask = URLSession.shared.dataTask(with: remoteURL) { data, response, error in
+            // Handle various error cases
+            if let error = error {
+                failure?(error)
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                failure?(UnexpectedResponseError(errorType: .unexpectedResponseType))
+                return
+            }
+
+            guard (200...299).contains(httpResponse.statusCode) else {
+                failure?(UnexpectedResponseError(errorType: .status(httpResponse.statusCode)))
+                return
+            }
+            
+            // Construct object and return
+            guard let data = data else {
+                failure?(UnexpectedResponseError(errorType: .noData))
+                return
+            }
+            success(GLTFSceneSource(data: data))
+        }
+        dataTask.resume()
+        
+        return dataTask
+    }
+
     public override convenience init(data: Data, options: [SCNSceneSource.LoadingOption : Any]? = nil) {
         self.init()
         do {
