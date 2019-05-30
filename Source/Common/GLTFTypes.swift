@@ -136,4 +136,6 @@ public class SceneOverlayModel {
     var images: [Int]?
     var halign: SVRFHorizontalAlignment?
     var valign: SVRFVerticalAlignment?
+    var hoffset: CGFloat?
+    var voffset: CGFloat?
 }
