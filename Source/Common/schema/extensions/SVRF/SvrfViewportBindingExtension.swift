@@ -9,25 +9,25 @@ import Foundation
 import SceneKit
 import SpriteKit
 
-protocol SVRFSceneOverlayLoader {
+protocol SvrfSceneOverlayLoader {
     func setOverlayModel(_ model: SceneOverlayModel) throws
 }
 
-enum SVRFVerticalAlignment: String, Codable {
+enum SvrfVerticalAlignment: String, Codable {
     case center = "center"
     case top = "top"
     case bottom = "bottom"
 }
 
-enum SVRFHorizontalAlignment: String, Codable {
+enum SvrfHorizontalAlignment: String, Codable {
     case center = "center"
     case left = "left"
     case right = "right"
 }
 
-struct SVRFViewportBindingExtension: GLTFCodable {
+struct SvrfViewportBindingExtension: GLTFCodable {
     
-    struct SVRFViewportBinding: Codable {
+    struct SvrfViewportBinding: Codable {
         let image: Int?
         let images: [Int]?
         let valign: String?
@@ -41,7 +41,7 @@ struct SVRFViewportBindingExtension: GLTFCodable {
         }
     }
 
-    let data: SVRFViewportBinding?
+    let data: SvrfViewportBinding?
 
     enum CodingKeys: String, CodingKey {
         case data = "SVRF_viewport"
@@ -68,28 +68,38 @@ struct SVRFViewportBindingExtension: GLTFCodable {
     /*
  Alignment can take the form of "center+10%"
  */
-    private func parseHorizontalAlignment() -> (SVRFHorizontalAlignment?, CGFloat?) {
+    private func parseHorizontalAlignment() -> (SvrfHorizontalAlignment?, CGFloat?) {
         if let halign = data?.halign {
             var align: String
-            var percentage: CGFloat
+            var percentage: CGFloat?
 
             let normalized = normalizeString(halign)
-            let addition = normalized.index(of: "+")
-            if let addition = addition {
+            if let addition = normalized.index(of: "+") {
                 align = String(normalized[..<addition])
-                percentage = 0//percentage(normalized.suffix(from: addition))
+                percentage = percentageFrom(String(normalized.suffix(from: addition)))
+            } else {
+                if let subtraction = normalized.index(of: "-") {
+                    align = String(normalized[..<subtraction])
+                    percentage = -(percentageFrom(String(normalized.suffix(from: subtraction))) ?? 0)
+
+                } else {
+                    align = normalized
+                    percentage = 0
+                }
             }
+            
+            return (SvrfHorizontalAlignment(rawValue: align), percentage ?? 0)
         }
         return (nil, nil)
     }
     
-    private func parseVerticalAlignment() -> (SVRFVerticalAlignment?, CGFloat?) {
+    private func parseVerticalAlignment() -> (SvrfVerticalAlignment?, CGFloat?) {
         return (.center, 0.0)
     }
     
     // Converts e.g. 10% to 0.10, or -12% to -0.12
-    private func percentage(_ input: String) -> CGFloat? {
-        return 0//CGFloat(NumberFormatter().number(from: input)?.floatValue)
+    private func percentageFrom(_ input: String) -> CGFloat? {
+        return CGFloat(NumberFormatter().number(from: input)?.floatValue ?? 0)
     }
     
     // Strips whitespace, lowercases
@@ -100,4 +110,3 @@ struct SVRFViewportBindingExtension: GLTFCodable {
     }
     
 }
-

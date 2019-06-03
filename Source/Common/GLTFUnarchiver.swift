@@ -1755,7 +1755,7 @@ public class GLTFUnarchiver {
     }
 }
 
-extension GLTFUnarchiver: SVRFSceneOverlayLoader {
+extension GLTFUnarchiver: SvrfSceneOverlayLoader {
     func setOverlayModel(_ model: SceneOverlayModel) throws {
         overlayModel = model
         if let images = overlayModel?.images {
