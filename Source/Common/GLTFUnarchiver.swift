@@ -1700,11 +1700,17 @@ public class GLTFUnarchiver {
             case .left: x = nodeSize.width/2
             case .right: x = scnView.frame.size.width - (nodeSize.width/2)
             }
+            if let hoffset = sceneOverlayModel.hoffset {
+                x += hoffset*scnView.frame.size.width
+            }
 
             switch sceneOverlayModel.valign ?? .center {
             case .center: y = scnView.frame.size.height/2
             case .bottom: y = nodeSize.height/2
             case .top: y = scnView.frame.size.height - (nodeSize.height/2)
+            }
+            if let voffset = sceneOverlayModel.voffset {
+                y += voffset*scnView.frame.size.height
             }
 
             imageNode.position = CGPoint(x: x, y: y)
@@ -1760,7 +1766,7 @@ extension GLTFUnarchiver: SvrfSceneOverlayLoader {
         overlayModel = model
         if let images = overlayModel?.images {
             for imageRef in images {
-                try loadImage(index: imageRef)
+                try _ = loadImage(index: imageRef)
             }
         }
     }

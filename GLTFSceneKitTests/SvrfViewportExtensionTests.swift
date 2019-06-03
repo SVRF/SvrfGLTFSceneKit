@@ -52,9 +52,5 @@ class SvrfViewportExtensionTests: XCTestCase {
         XCTAssertEqual(align3, .center)
         XCTAssertEqual(percent3, CGFloat(-0.32))
     }
-    
-    
-
-
 
 }
