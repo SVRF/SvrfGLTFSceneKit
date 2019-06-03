@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8804EDEE22A5B6AF003926C7 /* GLTFSceneKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8804EDED22A5B6AF003926C7 /* GLTFSceneKitTests.swift */; };
 		8804EDF022A5B6AF003926C7 /* GLTFSceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD3EB0711F52476B009F32D2 /* GLTFSceneKit.framework */; };
 		8804EDF722A5B78F003926C7 /* SvrfViewportExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8804EDF622A5B78F003926C7 /* SvrfViewportExtensionTests.swift */; };
 		8804EDFF22A5BB8A003926C7 /* SvrfViewportBindingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8804EDFE22A5BB8A003926C7 /* SvrfViewportBindingExtension.swift */; };
@@ -224,7 +223,6 @@
 
 /* Begin PBXFileReference section */
 		8804EDEB22A5B6AF003926C7 /* GLTFSceneKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GLTFSceneKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		8804EDED22A5B6AF003926C7 /* GLTFSceneKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLTFSceneKitTests.swift; sourceTree = "<group>"; };
 		8804EDEF22A5B6AF003926C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8804EDF622A5B78F003926C7 /* SvrfViewportExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SvrfViewportExtensionTests.swift; sourceTree = "<group>"; };
 		8804EDFE22A5BB8A003926C7 /* SvrfViewportBindingExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SvrfViewportBindingExtension.swift; sourceTree = "<group>"; };
@@ -346,7 +344,6 @@
 		8804EDEC22A5B6AF003926C7 /* GLTFSceneKitTests */ = {
 			isa = PBXGroup;
 			children = (
-				8804EDED22A5B6AF003926C7 /* GLTFSceneKitTests.swift */,
 				8804EDEF22A5B6AF003926C7 /* Info.plist */,
 				8804EDF622A5B78F003926C7 /* SvrfViewportExtensionTests.swift */,
 			);
@@ -824,7 +821,6 @@
 				8804EE1522A5BF84003926C7 /* GLTFCameraPerspective.swift in Sources */,
 				8804EE1422A5BF84003926C7 /* GLTFCameraOrthographic.swift in Sources */,
 				8804EE0122A5BE9C003926C7 /* SvrfViewportBindingExtension.swift in Sources */,
-				8804EDEE22A5B6AF003926C7 /* GLTFSceneKitTests.swift in Sources */,
 				8804EE2422A5BF84003926C7 /* GLTFSampler.swift in Sources */,
 				8804EE1222A5BF84003926C7 /* GLTFBufferView.swift in Sources */,
 				8804EE0D22A5BF84003926C7 /* GLTFAnimationChannel.swift in Sources */,
