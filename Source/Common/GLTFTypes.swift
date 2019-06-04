@@ -141,7 +141,7 @@ extension Image {
         case .Video(let url):
             let playerItem = AVPlayerItem(url: url)
             let queuePlayer = AVQueuePlayer(items: [playerItem])
-            let looper = AVPlayerLooper(player: queuePlayer, templateItem: playerItem)
+            let _looper = AVPlayerLooper(player: queuePlayer, templateItem: playerItem)
             
             queuePlayer.play()
             
