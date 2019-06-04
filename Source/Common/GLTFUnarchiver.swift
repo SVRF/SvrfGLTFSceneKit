@@ -166,31 +166,21 @@ public class GLTFUnarchiver {
             self.images = [Image?](repeating: nil, count: images.count)
         }
     }
-    
-    // getBase64Kind retrieves the MIME-type of the given base64 string
-    private func getBase64MIMEType(from str: String) -> String? {
-        guard str.starts(with: "data:") else { return nil }
+
+    // getBase64StringAndMIMEType returns the data portion and the MIME-type of a given base64 string
+    private func getBase64StringAndMIMEType(from str: String) -> (String?, String?) {
+        guard str.starts(with: "data:") else { return (nil, nil) }
 
         let mark = ";base64,"
-        guard str.contains(mark) else { return nil }
-
+        guard str.contains(mark) else { return (nil, nil) }
+        guard let base64Str = str.components(separatedBy: mark).last else { return (nil, nil) }
+        
         // remove the leading data string, split by on the mark
         var tmp = str
         tmp.removeFirst("data:".count)
-        guard let kind = tmp.components(separatedBy: mark).first else { return nil }
+        guard let kind = tmp.components(separatedBy: mark).first else { return (base64Str, nil) }
 
-        return kind
-    }
-
-    // getBase64Str returns the data portion of a given base64 string
-    private func getBase64Str(from str: String) -> String? {
-        guard str.starts(with: "data:") else { return nil }
-
-        let mark = ";base64,"
-        guard str.contains(mark) else { return nil }
-        guard let base64Str = str.components(separatedBy: mark).last else { return nil }
-
-        return base64Str
+        return (base64Str, kind)
     }
     
     private func calcPrimitiveCount(ofCount count: Int, primitiveType: SCNGeometryPrimitiveType) -> Int {
@@ -280,8 +270,9 @@ public class GLTFUnarchiver {
         
         var _buffer: Data?
         if let uri = glBuffer.uri {
-            if let base64Str = self.getBase64Str(from: uri) {
-                _buffer = Data(base64Encoded: base64Str)
+            let (base64Str, _) = self.getBase64StringAndMIMEType(from: uri)
+            if base64Str != nil {
+                _buffer = Data(base64Encoded: base64Str!)
             } else {
                 let url = URL(fileURLWithPath: uri, relativeTo: self.directoryPath)
                 _buffer = try Data(contentsOf: url)
@@ -803,12 +794,15 @@ public class GLTFUnarchiver {
         
         var image: Image?
         if let uri = glImage.uri {
-            if let base64Str = self.getBase64Str(from: uri) {
-                guard let data = Data(base64Encoded: base64Str) else {
-                    throw GLTFUnarchiveError.Unknown("loadImage: cannot convert the base64 string to Data")
+            let (base64Str, mimeType) = self.getBase64StringAndMIMEType(from: uri)
+            
+            if base64Str != nil {
+                guard let mimeType = mimeType else {
+                    throw GLTFUnarchiveError.Unknown("loadImage: cannot determine MIME-type of data")
                 }
-                guard let mimeType = self.getBase64MIMEType(from: uri) else {
-                    throw GLTFUnarchiveError.Unknown("loadImage: cannot get MIME-type from base64 string")
+
+                guard let data = Data(base64Encoded: base64Str!) else {
+                    throw GLTFUnarchiveError.Unknown("loadImage: cannot convert the base64 string to Data")
                 }
 
                 if mimeType == "video/mp4" {
