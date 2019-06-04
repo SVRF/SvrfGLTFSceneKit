@@ -105,14 +105,16 @@ import AVKit
 
 // TODO(artem): rename this to something that can encompass both
 // images and video, but that isn't "texture" (that's a glTF thing)
-enum Image {
-    case Photo(Data)
-    case Video(URL)
-}
-
-extension Image {
-    var contents: Any? {
-        switch self {
+class Media {
+    var kind: MediaKind
+    var contents: Any?
+    
+    // Used for .Video kind
+    fileprivate var looper: AVPlayerLooper?
+    
+    init?(kind: MediaKind) {
+        self.kind = kind
+        switch self.kind {
         case .Photo(let data):
             #if SEEMS_TO_HAVE_PNG_LOADING_BUG
             let magic: UInt64 = data.subdata(in: 0..<8).withUnsafeBytes { $0.pointee }
@@ -123,25 +125,25 @@ extension Image {
                     print("loadImage error: cannot create CGImage")
                     return nil
                 }
-
+                
                 #if os(macOS)
-                    let imageSize = CGSize(width: cgImage.width, height: cgImage.height)
-                    return NSImage(cgImage: cgImage, size: imageSize)
+                let imageSize = CGSize(width: cgImage.width, height: cgImage.height)
+                self.contents = NSImage(cgImage: cgImage, size: imageSize)
                 #else
-                    // FIXME: this workaround doesn't work for iOS...
-                    return UIImage(cgImage: cgImage)
+                // FIXME: this workaround doesn't work for iOS...
+                self.contents = UIImage(cgImage: cgImage)
                 #endif
             }
             #endif
             #if os(macOS)
-                return NSImage(data: data)
+            self.contents = NSImage(data: data)
             #elseif os(iOS) || os(tvOS) || os(watchOS)
-                return UIImage(data: data)
+            self.contents = UIImage(data: data)
             #endif
         case .Video(let url):
             let playerItem = AVPlayerItem(url: url)
             let queuePlayer = AVQueuePlayer(items: [playerItem])
-            let _looper = AVPlayerLooper(player: queuePlayer, templateItem: playerItem)
+            self.looper = AVPlayerLooper(player: queuePlayer, templateItem: playerItem)
             
             queuePlayer.play()
             
@@ -149,10 +151,16 @@ extension Image {
                 print("Error playing url:", error)
             }
             
-            return queuePlayer
+            self.contents = queuePlayer
         }
     }
 }
+
+enum MediaKind {
+    case Photo(Data)
+    case Video(URL)
+}
+
 
 public protocol GLTFCodable: Codable {
     func didLoad(by object: Any, unarchiver: GLTFUnarchiver)

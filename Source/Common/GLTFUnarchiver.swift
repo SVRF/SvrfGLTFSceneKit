@@ -35,7 +35,7 @@ public class GLTFUnarchiver {
     private var buffers: [Data?] = []
     private var materials: [SCNMaterial?] = []
     private var textures: [SCNMaterialProperty?] = []
-    private var images: [Image?] = []
+    private var images: [Media?] = []
     private var maxAnimationDuration: CFTimeInterval = 0.0
     
     #if !os(watchOS)
@@ -163,7 +163,7 @@ public class GLTFUnarchiver {
         }
         
         if let images = self.json.images {
-            self.images = [Image?](repeating: nil, count: images.count)
+            self.images = [Media?](repeating: nil, count: images.count)
         }
     }
 
@@ -778,7 +778,7 @@ public class GLTFUnarchiver {
         return valueArray
     }
     
-    private func loadImage(index: Int) throws -> Image {
+    private func loadImage(index: Int) throws -> Media {
         guard index < self.images.count else {
             throw GLTFUnarchiveError.DataInconsistent("loadImage: out of index: \(index) < \(self.images.count)")
         }
@@ -792,7 +792,7 @@ public class GLTFUnarchiver {
         }
         let glImage = images[index]
         
-        var image: Image?
+        var image: Media?
         if let uri = glImage.uri {
             let (base64Str, mimeType) = self.getBase64StringAndMIMEType(from: uri)
             
@@ -1026,12 +1026,12 @@ public class GLTFUnarchiver {
                     material.roughness.textureComponents = .green
                 } else {
                     // Fallback on earlier versions
-                    if let image = material.metalness.contents as? Image {
+                    if let image = material.metalness.contents as? Media {
                         guard image.contents != nil else {
-                            throw GLTFUnarchiveError.Unknown("loadMaterial: cannot get contents of Image")
+                            throw GLTFUnarchiveError.Unknown("loadMaterial: cannot get contents of Media")
                         }
                         
-                        switch image {
+                        switch image.kind {
                         case .Video:
                             // NOTE: This could be done, but it would require splitting the video channels on-device.
                             throw GLTFUnarchiveError.Unknown("loadMaterial: only Photos can be materials")

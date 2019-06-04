@@ -200,19 +200,19 @@ func guessMIMEType(from url: URL) -> String? {
     }
 }
 
-func loadImageFile(from url: URL) throws -> Image? {
+func loadImageFile(from url: URL) throws -> Media? {
     print("loadImageFile: Fetching \(url.absoluteString)")
     guard let mimeType = guessMIMEType(from: url) else { return nil }
     if mimeType == "video/mp4" {
-        return Image.Video(url)
+        return Media(kind: .Video(url))
     }
     
     let data = try Data.init(contentsOf: url)
     return try loadImageData(from: data)
 }
 
-func loadImageData(from data: Data) throws -> Image? {
-    return Image.Photo(data)
+func loadImageData(from data: Data) throws -> Media? {
+    return Media(kind: .Photo(data))
 }
 
 /*
