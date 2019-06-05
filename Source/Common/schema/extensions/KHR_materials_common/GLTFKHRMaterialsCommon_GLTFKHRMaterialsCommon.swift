@@ -55,7 +55,7 @@ struct GLTFKHRMaterialsCommon_GLTFKHRMaterialsCommonExtension: GLTFCodable {
                 case _ambient = "ambient"
                 case _diffuse = "diffuse"
                 case _emission = "emission"
-                case _specular = "specuar"
+                case _specular = "specular"
                 case _shininess = "shininess"
                 case _transparency = "transparency"
             }
