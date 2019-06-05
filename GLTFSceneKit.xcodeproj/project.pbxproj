@@ -350,21 +350,13 @@
 			path = GLTFSceneKitTests;
 			sourceTree = "<group>";
 		};
-		8804EDFD22A5BB8A003926C7 /* SVRF */ = {
-			isa = PBXGroup;
-			children = (
-				8804EDFE22A5BB8A003926C7 /* SvrfViewportBindingExtension.swift */,
-			);
-			path = SVRF;
-			sourceTree = "<group>";
-		};
 		DD2E982B1F4CF55400D47C89 /* extensions */ = {
 			isa = PBXGroup;
 			children = (
 				DD2E982D1F4CF5B800D47C89 /* ExtensionList.swift */,
+				8804EDFE22A5BB8A003926C7 /* SvrfViewportBindingExtension.swift */,
 				DD2E982F1F4CF6FA00D47C89 /* KHR_materials_common */,
 				DD9BFA7A1F9C0EBB00542D5B /* KHR_materials_pbrSpecularGlossiness */,
-				8804EDFD22A5BB8A003926C7 /* SVRF */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
