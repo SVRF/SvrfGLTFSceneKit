@@ -155,7 +155,6 @@ class Media: NSObject {
             queuePlayer?.actionAtItemEnd = .none
             
             queuePlayer?.play()
-            print("Image.video: Playing video")
             
             if let error = queuePlayer!.error {
                 print("Error playing url:", error)
@@ -168,11 +167,6 @@ class Media: NSObject {
 
             self.contents = queuePlayer
         }
-    }
-    
-    @objc func playerItemDidReachEnd(notification: Notification) {
-        print("Rewinding")
-        playerItem?.seek(to: kCMTimeZero, completionHandler: nil)
     }
 }
 

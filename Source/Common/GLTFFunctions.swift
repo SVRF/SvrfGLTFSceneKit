@@ -201,7 +201,6 @@ func guessMIMEType(from url: URL) -> String? {
 }
 
 func loadImageFile(from url: URL) throws -> Media? {
-    print("loadImageFile: Fetching \(url.absoluteString)")
     guard let mimeType = guessMIMEType(from: url) else { return nil }
     if mimeType == "video/mp4" {
         return Media(kind: .Video(url))
