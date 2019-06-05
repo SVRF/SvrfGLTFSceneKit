@@ -22,6 +22,7 @@ public class GLTFUnarchiver {
     
     private var scene: SCNScene?
     private var scenes: [SCNScene?] = []
+    private var overlayModel: SceneOverlayModel?
     private var cameras: [SCNCamera?] = []
     private var nodes: [SCNNode?] = []
     private var skins: [SCNSkinner?] = []
@@ -1672,6 +1673,53 @@ public class GLTFUnarchiver {
         return try self.loadScene(index: 0)
     }
     
+    func loadSceneOverlay(scnView: SCNView) -> SKScene? {
+        guard let sceneOverlayModel = overlayModel else {
+            return nil
+        }
+
+        let skScene = SKScene(size: scnView.frame.size)
+        if let imageRefs = sceneOverlayModel.images {
+            let imageNode: SKSpriteNode
+            let nodeSize: CGSize
+
+            if (images.count == 1) {
+                let image = self.images[imageRefs[0]]!
+                let texture = SKTexture(image: image)
+                imageNode = SKSpriteNode(texture: texture)
+                nodeSize = texture.size()
+            } else {
+                imageNode = SKSpriteNode(images: imageRefs.compactMap { return images[$0] })
+                nodeSize = imageNode.size
+            }
+
+            var x: CGFloat
+            var y: CGFloat
+            switch sceneOverlayModel.halign ?? .center {
+            case .center: x = scnView.frame.size.width/2
+            case .left: x = nodeSize.width/2
+            case .right: x = scnView.frame.size.width - (nodeSize.width/2)
+            }
+            if let hoffset = sceneOverlayModel.hoffset {
+                x += hoffset*scnView.frame.size.width
+            }
+
+            switch sceneOverlayModel.valign ?? .center {
+            case .center: y = scnView.frame.size.height/2
+            case .bottom: y = nodeSize.height/2
+            case .top: y = scnView.frame.size.height - (nodeSize.height/2)
+            }
+            if let voffset = sceneOverlayModel.voffset {
+                y += voffset*scnView.frame.size.height
+            }
+
+            imageNode.position = CGPoint(x: x, y: y)
+            skScene.addChild(imageNode)
+        }
+
+        return skScene
+    }
+    
     private func loadScene(index: Int) throws -> SCNScene {
         guard index < self.scenes.count else {
             throw GLTFUnarchiveError.DataInconsistent("loadScene: out of index: \(index) < \(self.scenes.count)")
@@ -1713,3 +1761,13 @@ public class GLTFUnarchiver {
     }
 }
 
+extension GLTFUnarchiver: SvrfSceneOverlayLoader {
+    func setOverlayModel(_ model: SceneOverlayModel) throws {
+        overlayModel = model
+        if let images = overlayModel?.images {
+            for imageRef in images {
+                try _ = loadImage(index: imageRef)
+            }
+        }
+    }
+}
