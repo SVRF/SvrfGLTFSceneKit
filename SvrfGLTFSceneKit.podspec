@@ -1,6 +1,7 @@
 Pod::Spec.new do |s|
   s.name = "SvrfGLTFSceneKit"
   s.version = "1.1.0"
+
   s.summary = "SvrfGLTF loader for SceneKit"
   s.homepage = "https://github.com/SVRF/SvrfGLTFSceneKit"
   s.license = "MIT"
