@@ -1736,7 +1736,7 @@ public class GLTFUnarchiver {
                 imageNode = SKSpriteNode(texture: texture)
                 nodeSize = texture.size()
             } else {
-                imageNode = SKSpriteNode(images: imageRefs.compactMap { return images[$0] })
+                imageNode = SKSpriteNode(images: imageRefs.compactMap { return images[$0]?.contents as? UIImage })
                 nodeSize = imageNode.size
             }
 
