@@ -792,7 +792,7 @@ public class GLTFUnarchiver {
         }
         let glImage = images[index]
         
-        var image: Media?
+        var media: Media?
         if let uri = glImage.uri {
             let (base64Str, mimeType) = self.getBase64StringAndMIMEType(from: uri)
             
@@ -811,29 +811,29 @@ public class GLTFUnarchiver {
                     let filename = ProcessInfo().globallyUniqueString.appending(".mp4")
                     let url = tempDirectory.appendingPathComponent(filename)
                     try data.write(to: url)
-                    image = try loadImageFile(from: url)
+                    media = try loadImageFile(from: url)
                 } else {
-                    image = try loadImageData(from: data)
+                    media = try loadImageData(from: data)
                 }
             } else {
                 let url = URL(fileURLWithPath: uri, relativeTo: self.directoryPath)
-                image = try loadImageFile(from: url)
+                media = try loadImageFile(from: url)
             }
         } else if let bufferViewIndex = glImage.bufferView {
             // TODO(artem): figure out how to determine if this is a video from the bufferview.
             // Might have to sniff it? Currently just assumes it's a still image.
             let bufferView = try self.loadBufferView(index: bufferViewIndex)
-            image = try loadImageData(from: bufferView)
+            media = try loadImageData(from: bufferView)
         }
         
-        guard let _image = image else {
+        guard let _media = media else {
             throw GLTFUnarchiveError.Unknown("loadImage: image \(index) is not loaded")
         }
         
-        self.images[index] = _image
+        self.images[index] = _media
         
-        glImage.didLoad(by: _image, unarchiver: self)
-        return _image
+        glImage.didLoad(by: _media, unarchiver: self)
+        return _media
     }
     
     private func setSampler(index: Int, to property: SCNMaterialProperty) throws {

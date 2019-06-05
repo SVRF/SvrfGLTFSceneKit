@@ -103,17 +103,24 @@ let keyPathMap: [String: String] = [
 
 import AVKit
 
-// TODO(artem): rename this to something that can encompass both
-// images and video, but that isn't "texture" (that's a glTF thing)
-class Media {
+enum MediaKind {
+    case Photo(Data)
+    case Video(URL)
+}
+
+class Media: NSObject {
     var kind: MediaKind
     var contents: Any?
     
     // Used for .Video kind
-    fileprivate var looper: AVPlayerLooper?
-    
+    var asset: AVAsset?
+    var playerItem: AVPlayerItem?
+    var queuePlayer: AVQueuePlayer?
+
     init?(kind: MediaKind) {
         self.kind = kind
+        super.init()
+
         switch self.kind {
         case .Photo(let data):
             #if SEEMS_TO_HAVE_PNG_LOADING_BUG
@@ -141,26 +148,33 @@ class Media {
             self.contents = UIImage(data: data)
             #endif
         case .Video(let url):
-            let playerItem = AVPlayerItem(url: url)
-            let queuePlayer = AVQueuePlayer(items: [playerItem])
-            self.looper = AVPlayerLooper(player: queuePlayer, templateItem: playerItem)
+            asset = AVAsset(url: url)
+            playerItem = AVPlayerItem(asset: asset!)
+            queuePlayer = AVQueuePlayer(playerItem: playerItem)
             
-            queuePlayer.play()
+            queuePlayer?.actionAtItemEnd = .none
             
-            if let error = queuePlayer.error {
+            queuePlayer?.play()
+            print("Image.video: Playing video")
+            
+            if let error = queuePlayer!.error {
                 print("Error playing url:", error)
             }
-            
+
+            NotificationCenter.default.addObserver(forName: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil, queue: nil) { notification in
+                self.queuePlayer?.seek(to: kCMTimeZero)
+                self.queuePlayer?.play()
+            }
+
             self.contents = queuePlayer
         }
     }
+    
+    @objc func playerItemDidReachEnd(notification: Notification) {
+        print("Rewinding")
+        playerItem?.seek(to: kCMTimeZero, completionHandler: nil)
+    }
 }
-
-enum MediaKind {
-    case Photo(Data)
-    case Video(URL)
-}
-
 
 public protocol GLTFCodable: Codable {
     func didLoad(by object: Any, unarchiver: GLTFUnarchiver)
