@@ -101,11 +101,74 @@ let keyPathMap: [String: String] = [
     "scale": "scale"
 ]
 
-#if os(macOS)
-    typealias Image = NSImage
-#elseif os(iOS) || os(tvOS) || os(watchOS)
-    typealias Image = UIImage
-#endif
+import AVKit
+
+enum MediaKind {
+    case Photo(Data)
+    case Video(URL)
+}
+
+class Media: NSObject {
+    var kind: MediaKind
+    var contents: Any?
+    
+    // Used for .Video kind
+    var asset: AVAsset?
+    var playerItem: AVPlayerItem?
+    var queuePlayer: AVQueuePlayer?
+
+    init?(kind: MediaKind) {
+        self.kind = kind
+        super.init()
+
+        switch self.kind {
+        case .Photo(let data):
+            #if SEEMS_TO_HAVE_PNG_LOADING_BUG
+            let magic: UInt64 = data.subdata(in: 0..<8).withUnsafeBytes { $0.pointee }
+            if magic == 0x0A1A0A0D474E5089 {
+                // PNG file
+                let cgDataProvider = CGDataProvider(data: data as CFData)
+                guard let cgImage = CGImage(pngDataProviderSource: cgDataProvider!, decode: nil, shouldInterpolate: false, intent: CGColorRenderingIntent.defaultIntent) else {
+                    print("loadImage error: cannot create CGImage")
+                    return nil
+                }
+                
+                #if os(macOS)
+                let imageSize = CGSize(width: cgImage.width, height: cgImage.height)
+                self.contents = NSImage(cgImage: cgImage, size: imageSize)
+                #else
+                // FIXME: this workaround doesn't work for iOS...
+                self.contents = UIImage(cgImage: cgImage)
+                #endif
+            }
+            #endif
+            #if os(macOS)
+            self.contents = NSImage(data: data)
+            #elseif os(iOS) || os(tvOS) || os(watchOS)
+            self.contents = UIImage(data: data)
+            #endif
+        case .Video(let url):
+            asset = AVAsset(url: url)
+            playerItem = AVPlayerItem(asset: asset!)
+            queuePlayer = AVQueuePlayer(playerItem: playerItem)
+            
+            queuePlayer?.actionAtItemEnd = .none
+            
+            queuePlayer?.play()
+            
+            if let error = queuePlayer!.error {
+                print("Error playing url:", error)
+            }
+
+            NotificationCenter.default.addObserver(forName: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil, queue: nil) { notification in
+                self.queuePlayer?.seek(to: kCMTimeZero)
+                self.queuePlayer?.play()
+            }
+
+            self.contents = queuePlayer
+        }
+    }
+}
 
 public protocol GLTFCodable: Codable {
     func didLoad(by object: Any, unarchiver: GLTFUnarchiver)

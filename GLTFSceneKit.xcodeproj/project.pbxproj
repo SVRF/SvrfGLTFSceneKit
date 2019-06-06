@@ -58,6 +58,10 @@
 		8804EE2E22A5BFCE003926C7 /* GLTFKHRMaterialsPbrSpecularGlossiness_GLTFKHRMaterialsPbrSpecularGlossiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9BFA7B1F9C0EBB00542D5B /* GLTFKHRMaterialsPbrSpecularGlossiness_GLTFKHRMaterialsPbrSpecularGlossiness.swift */; };
 		9DA74DB61FD5F8D9007F0749 /* GLTFShaderModifierSurface_alphaModeBlend.shader in Resources */ = {isa = PBXBuildFile; fileRef = 9DA74DB31FD5F54F007F0749 /* GLTFShaderModifierSurface_alphaModeBlend.shader */; };
 		9DA74DB71FD5FBAC007F0749 /* GLTFShaderModifierSurface_alphaModeBlend.shader in Resources */ = {isa = PBXBuildFile; fileRef = 9DA74DB31FD5F54F007F0749 /* GLTFShaderModifierSurface_alphaModeBlend.shader */; };
+		AC4768F022A5920500EF6B74 /* GLTFSVRFVideoTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4768EF22A5920500EF6B74 /* GLTFSVRFVideoTexture.swift */; };
+		AC4768F122A5920500EF6B74 /* GLTFSVRFVideoTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4768EF22A5920500EF6B74 /* GLTFSVRFVideoTexture.swift */; };
+		AC4768F222A5920500EF6B74 /* GLTFSVRFVideoTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4768EF22A5920500EF6B74 /* GLTFSVRFVideoTexture.swift */; };
+		AC4768F322A5920500EF6B74 /* GLTFSVRFVideoTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4768EF22A5920500EF6B74 /* GLTFSVRFVideoTexture.swift */; };
 		DD10459A1F47723D004B20CE /* GLTFTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1045991F47723D004B20CE /* GLTFTypes.swift */; };
 		DD10459C1F4772E3004B20CE /* GLTFErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD10459B1F4772E3004B20CE /* GLTFErrors.swift */; };
 		DD2930291F9C8E7C00216F1D /* GLTFShaderModifierSurface.shader in Resources */ = {isa = PBXBuildFile; fileRef = DD071E031F55ED1200F00567 /* GLTFShaderModifierSurface.shader */; };
@@ -225,9 +229,10 @@
 		8804EDEB22A5B6AF003926C7 /* GLTFSceneKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GLTFSceneKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8804EDEF22A5B6AF003926C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8804EDF622A5B78F003926C7 /* SvrfViewportExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SvrfViewportExtensionTests.swift; sourceTree = "<group>"; };
-		8804EDFE22A5BB8A003926C7 /* SvrfViewportBindingExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SvrfViewportBindingExtension.swift; sourceTree = "<group>"; };
+		8804EDFE22A5BB8A003926C7 /* SvrfViewportBindingExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SvrfViewportBindingExtension.swift; path = Source/Common/schema/extensions/SVRF_viewport/SvrfViewportBindingExtension.swift; sourceTree = SOURCE_ROOT; };
 		8804EE0222A5BF29003926C7 /* SKSpriteNode+ImageArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SKSpriteNode+ImageArray.swift"; sourceTree = "<group>"; };
 		9DA74DB31FD5F54F007F0749 /* GLTFShaderModifierSurface_alphaModeBlend.shader */ = {isa = PBXFileReference; lastKnownFileType = text; path = GLTFShaderModifierSurface_alphaModeBlend.shader; sourceTree = "<group>"; };
+		AC4768EF22A5920500EF6B74 /* GLTFSVRFVideoTexture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GLTFSVRFVideoTexture.swift; path = Source/Common/schema/extensions/SVRF_video_texture/GLTFSVRFVideoTexture.swift; sourceTree = SOURCE_ROOT; };
 		DD071E031F55ED1200F00567 /* GLTFShaderModifierSurface.shader */ = {isa = PBXFileReference; lastKnownFileType = text; path = GLTFShaderModifierSurface.shader; sourceTree = "<group>"; };
 		DD1045991F47723D004B20CE /* GLTFTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLTFTypes.swift; sourceTree = "<group>"; };
 		DD10459B1F4772E3004B20CE /* GLTFErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLTFErrors.swift; sourceTree = "<group>"; };
@@ -350,10 +355,19 @@
 			path = GLTFSceneKitTests;
 			sourceTree = "<group>";
 		};
+		AC4768EE22A5920500EF6B74 /* SVRF_video_texture */ = {
+			isa = PBXGroup;
+			children = (
+				AC4768EF22A5920500EF6B74 /* GLTFSVRFVideoTexture.swift */,
+			);
+			path = SVRF_video_texture;
+			sourceTree = "<unknown>";
+		};
 		DD2E982B1F4CF55400D47C89 /* extensions */ = {
 			isa = PBXGroup;
 			children = (
 				DD2E982D1F4CF5B800D47C89 /* ExtensionList.swift */,
+				AC4768EE22A5920500EF6B74 /* SVRF_video_texture */,
 				8804EDFE22A5BB8A003926C7 /* SvrfViewportBindingExtension.swift */,
 				DD2E982F1F4CF6FA00D47C89 /* KHR_materials_common */,
 				DD9BFA7A1F9C0EBB00542D5B /* KHR_materials_pbrSpecularGlossiness */,
@@ -861,6 +875,7 @@
 				DD3EB0951F524783009F32D2 /* GLTFSampler.swift in Sources */,
 				DD3EB0851F524783009F32D2 /* GLTFCameraOrthographic.swift in Sources */,
 				DD3EB0831F524783009F32D2 /* GLTFBufferView.swift in Sources */,
+				AC4768F122A5920500EF6B74 /* GLTFSVRFVideoTexture.swift in Sources */,
 				DD3EB0921F524783009F32D2 /* GLTFMesh.swift in Sources */,
 				DD3EB08D1F524783009F32D2 /* GLTFImage.swift in Sources */,
 				DD3EB0941F524783009F32D2 /* GLTFNode.swift in Sources */,
@@ -911,6 +926,7 @@
 				DD634F9D1F4A2D90008886AD /* GLTFFunctions.swift in Sources */,
 				DDE6FD6A1F466F3600CB11D6 /* GLTFBufferView.swift in Sources */,
 				DDE6FD821F466F9B00CB11D6 /* GLTFUnarchiver.swift in Sources */,
+				AC4768F022A5920500EF6B74 /* GLTFSVRFVideoTexture.swift in Sources */,
 				DDE6FD791F466F3600CB11D6 /* GLTFMesh.swift in Sources */,
 				DDE6FD741F466F3600CB11D6 /* GLTFImage.swift in Sources */,
 				DDE6FD7B1F466F3600CB11D6 /* GLTFNode.swift in Sources */,
@@ -929,6 +945,7 @@
 			files = (
 				DDB221FD1F525ED1002CFA4D /* GameViewController.swift in Sources */,
 				DDB221F81F525E99002CFA4D /* AppDelegate.swift in Sources */,
+				AC4768F322A5920500EF6B74 /* GLTFSVRFVideoTexture.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -938,6 +955,7 @@
 			files = (
 				DDE6FDC91F4671C400CB11D6 /* AppDelegate.swift in Sources */,
 				DDE6FDD31F4675C900CB11D6 /* GameView.swift in Sources */,
+				AC4768F222A5920500EF6B74 /* GLTFSVRFVideoTexture.swift in Sources */,
 				DDE6FDD41F4675CB00CB11D6 /* GameViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

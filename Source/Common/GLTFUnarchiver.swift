@@ -36,7 +36,7 @@ public class GLTFUnarchiver {
     private var buffers: [Data?] = []
     private var materials: [SCNMaterial?] = []
     private var textures: [SCNMaterialProperty?] = []
-    private var images: [Image?] = []
+    private var images: [Media?] = []
     private var maxAnimationDuration: CFTimeInterval = 0.0
     
     #if !os(watchOS)
@@ -164,18 +164,24 @@ public class GLTFUnarchiver {
         }
         
         if let images = self.json.images {
-            self.images = [Image?](repeating: nil, count: images.count)
+            self.images = [Media?](repeating: nil, count: images.count)
         }
     }
-    
-    private func getBase64Str(from str: String) -> String? {
-        guard str.starts(with: "data:") else { return nil }
-        
+
+    // getBase64StringAndMIMEType returns the data portion and the MIME-type of a given base64 string
+    private func getBase64StringAndMIMEType(from str: String) -> (String?, String?) {
+        guard str.starts(with: "data:") else { return (nil, nil) }
+
         let mark = ";base64,"
-        guard str.contains(mark) else { return nil }
-        guard let base64Str = str.components(separatedBy: mark).last else { return nil }
+        guard str.contains(mark) else { return (nil, nil) }
+        guard let base64Str = str.components(separatedBy: mark).last else { return (nil, nil) }
         
-        return base64Str
+        // remove the leading data string, split by on the mark
+        var tmp = str
+        tmp.removeFirst("data:".count)
+        guard let kind = tmp.components(separatedBy: mark).first else { return (base64Str, nil) }
+
+        return (base64Str, kind)
     }
     
     private func calcPrimitiveCount(ofCount count: Int, primitiveType: SCNGeometryPrimitiveType) -> Int {
@@ -265,8 +271,9 @@ public class GLTFUnarchiver {
         
         var _buffer: Data?
         if let uri = glBuffer.uri {
-            if let base64Str = self.getBase64Str(from: uri) {
-                _buffer = Data(base64Encoded: base64Str)
+            let (base64Str, _) = self.getBase64StringAndMIMEType(from: uri)
+            if base64Str != nil {
+                _buffer = Data(base64Encoded: base64Str!)
             } else {
                 let url = URL(fileURLWithPath: uri, relativeTo: self.directoryPath)
                 _buffer = try Data(contentsOf: url)
@@ -772,7 +779,7 @@ public class GLTFUnarchiver {
         return valueArray
     }
     
-    private func loadImage(index: Int) throws -> Image {
+    private func loadImage(index: Int) throws -> Media {
         guard index < self.images.count else {
             throw GLTFUnarchiveError.DataInconsistent("loadImage: out of index: \(index) < \(self.images.count)")
         }
@@ -786,30 +793,48 @@ public class GLTFUnarchiver {
         }
         let glImage = images[index]
         
-        var image: Image?
+        var media: Media?
         if let uri = glImage.uri {
-            if let base64Str = self.getBase64Str(from: uri) {
-                guard let data = Data(base64Encoded: base64Str) else {
+            let (base64Str, mimeType) = self.getBase64StringAndMIMEType(from: uri)
+            
+            if base64Str != nil {
+                guard let mimeType = mimeType else {
+                    throw GLTFUnarchiveError.Unknown("loadImage: cannot determine MIME-type of data")
+                }
+
+                guard let data = Data(base64Encoded: base64Str!) else {
                     throw GLTFUnarchiveError.Unknown("loadImage: cannot convert the base64 string to Data")
                 }
-                image = try loadImageData(from: data)
+
+                if mimeType == "video/mp4" {
+                    // save data to file and load from that uri
+                    let tempDirectory = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+                    let filename = ProcessInfo().globallyUniqueString.appending(".mp4")
+                    let url = tempDirectory.appendingPathComponent(filename)
+                    try data.write(to: url)
+                    media = try loadImageFile(from: url)
+                } else {
+                    media = try loadImageData(from: data)
+                }
             } else {
                 let url = URL(fileURLWithPath: uri, relativeTo: self.directoryPath)
-                image = try loadImageFile(from: url)
+                media = try loadImageFile(from: url)
             }
         } else if let bufferViewIndex = glImage.bufferView {
+            // TODO(artem): figure out how to determine if this is a video from the bufferview.
+            // Might have to sniff it? Currently just assumes it's a still image.
             let bufferView = try self.loadBufferView(index: bufferViewIndex)
-            image = try loadImageData(from: bufferView)
+            media = try loadImageData(from: bufferView)
         }
         
-        guard let _image = image else {
+        guard let _media = media else {
             throw GLTFUnarchiveError.Unknown("loadImage: image \(index) is not loaded")
         }
         
-        self.images[index] = _image
+        self.images[index] = _media
         
-        glImage.didLoad(by: _image, unarchiver: self)
-        return _image
+        glImage.didLoad(by: _media, unarchiver: self)
+        return _media
     }
     
     private func setSampler(index: Int, to property: SCNMaterialProperty) throws {
@@ -882,9 +907,13 @@ public class GLTFUnarchiver {
         guard let sourceIndex = glTexture.source else {
             throw GLTFUnarchiveError.NotSupported("loadTexture: texture without source is not supported")
         }
+
         let image = try self.loadImage(index: sourceIndex)
-        
-        let texture = SCNMaterialProperty(contents: image)
+        guard let contents = image.contents else {
+            throw GLTFUnarchiveError.Unknown("loadTexture: texture contents did not load")
+        }
+
+        let texture = SCNMaterialProperty(contents: contents)
         
         // TODO: retain glTexture.name somewhere
         
@@ -953,6 +982,10 @@ public class GLTFUnarchiver {
         let material = SCNMaterial()
         self.materials[index] = material
         
+        if let name = glMaterial.name {
+            material.name = name
+        }
+        
         material.setValue(Float(1.0), forKey: "baseColorFactorR")
         material.setValue(Float(1.0), forKey: "baseColorFactorG")
         material.setValue(Float(1.0), forKey: "baseColorFactorB")
@@ -994,10 +1027,24 @@ public class GLTFUnarchiver {
                     material.roughness.textureComponents = .green
                 } else {
                     // Fallback on earlier versions
-                    if let image = material.metalness.contents as? Image {
-                        let (metalness, roughness) = try getMetallicRoughnessTexture(from: image)
-                        material.metalness.contents = metalness
-                        material.roughness.contents = roughness
+                    if let image = material.metalness.contents as? Media {
+                        guard image.contents != nil else {
+                            throw GLTFUnarchiveError.Unknown("loadMaterial: cannot get contents of Media")
+                        }
+                        
+                        switch image.kind {
+                        case .Video:
+                            // NOTE: This could be done, but it would require splitting the video channels on-device.
+                            throw GLTFUnarchiveError.Unknown("loadMaterial: only Photos can be materials")
+                        case .Photo:
+                            #if os(macOS)
+                            let (metalness, roughness) = try getMetallicRoughnessTexture(from: image.contents as! NSImage)
+                            #else
+                            let (metalness, roughness) = try getMetallicRoughnessTexture(from: image.contents as! UIImage)
+                            #endif
+                            material.metalness.contents = metalness
+                            material.roughness.contents = roughness
+                        }
                     }
                 }
                 
@@ -1070,7 +1117,7 @@ public class GLTFUnarchiver {
                 sources.append(accessor)
             } else {
                 // user defined semantic
-                throw GLTFUnarchiveError.NotSupported("loadMesh: user defined semantic is not supported: " + attribute)
+                throw GLTFUnarchiveError.NotSupported("loadAttributes: user defined semantic is not supported: " + attribute)
             }
         }
         return sources
@@ -1685,11 +1732,11 @@ public class GLTFUnarchiver {
 
             if (images.count == 1) {
                 let image = self.images[imageRefs[0]]!
-                let texture = SKTexture(image: image)
+                let texture = SKTexture(image: image.contents as! UIImage)
                 imageNode = SKSpriteNode(texture: texture)
                 nodeSize = texture.size()
             } else {
-                imageNode = SKSpriteNode(images: imageRefs.compactMap { return images[$0] })
+                imageNode = SKSpriteNode(images: imageRefs.compactMap { return images[$0]?.contents as? UIImage })
                 nodeSize = imageNode.size
             }
 
