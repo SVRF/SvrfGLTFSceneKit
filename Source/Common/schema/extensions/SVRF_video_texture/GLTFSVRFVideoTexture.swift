@@ -10,10 +10,10 @@ import SceneKit
 
 struct GLTFSvrfVideoTextureExtension: GLTFCodable {
     struct GLTFSvrfVideoTextureSchema: Codable {
-        var texture: Int
+        var diffuse: Int?
 
         private enum CodingKeys: String, CodingKey {
-            case texture
+            case diffuse
         }
     }
     
@@ -26,6 +26,8 @@ struct GLTFSvrfVideoTextureExtension: GLTFCodable {
         guard let data = self.data else { return }
         guard let material = object as? SCNMaterial else { return }
         
-        try! unarchiver.setTexture(index: data.texture, to: material.diffuse)
+        if let diffuse = data.diffuse {
+            try! unarchiver.setTexture(index: diffuse, to: material.diffuse)
+        }
     }
 }
