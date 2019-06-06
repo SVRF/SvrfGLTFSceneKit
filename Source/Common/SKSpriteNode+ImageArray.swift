@@ -8,6 +8,12 @@
 import SpriteKit
 import ImageIO
 
+#if os(macOS)
+import Foundation
+#else
+import UIKit
+#endif
+
 extension SKSpriteNode {
 
     convenience init(imageFiles: [String]) {
@@ -22,11 +28,19 @@ extension SKSpriteNode {
         animateWithImageFiles(imageFiles)
     }
     
+    #if os(macOS)
+    convenience init(images: [NSImage]) {
+        self.init(texture: SKTexture(image: images[0]))
+        
+        animateWithImages(images)
+    }
+    #else
     convenience init(images: [UIImage]) {
         self.init(texture: SKTexture(image: images[0]))
         
         animateWithImages(images)
     }
+    #endif
     
     func animateWithImageFiles(_ imageFiles:[String]) {
         var currentFrame = 0
@@ -40,11 +54,18 @@ extension SKSpriteNode {
         let action = SKAction.repeatForever(SKAction.sequence([nextFrameAction, delayAction]))
         self.run(action)
     }
-    
+
+    #if os(macOS)
+    func animateWithImages(_ images:[NSImage]) {
+        let action = SKAction.repeatForever(SKAction.animate(with: images.map { return SKTexture(image: $0) },
+                                                             timePerFrame: 0.1))
+        self.run(action)
+    }
+    #else
     func animateWithImages(_ images:[UIImage]) {
         let action = SKAction.repeatForever(SKAction.animate(with: images.map { return SKTexture(image: $0) },
                                                              timePerFrame: 0.1))
         self.run(action)
     }
-
+    #endif
 }

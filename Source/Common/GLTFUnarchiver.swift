@@ -11,9 +11,17 @@ import SpriteKit
 import QuartzCore
 import CoreGraphics
 
+#if os(macOS)
+import Foundation
+#else
+import UIKit
+#endif
+
 let glbMagic = 0x46546C67 // "glTF"
 let chunkTypeJSON = 0x4E4F534A // "JSON"
 let chunkTypeBIN = 0x004E4942 // "BIN"
+
+
 
 public class GLTFUnarchiver {
     private var directoryPath: URL? = nil
@@ -1732,11 +1740,21 @@ public class GLTFUnarchiver {
 
             if (images.count == 1) {
                 let image = self.images[imageRefs[0]]!
-                let texture = SKTexture(image: image.contents as! UIImage)
+                #if os(macOS)
+                    let texture = SKTexture(image: image.contents as! NSImage)
+                #else
+                    let texture = SKTexture(image: image.contents as! UIImage)
+                #endif
+                
                 imageNode = SKSpriteNode(texture: texture)
                 nodeSize = texture.size()
             } else {
-                imageNode = SKSpriteNode(images: imageRefs.compactMap { return images[$0]?.contents as? UIImage })
+                #if os(macOS)
+                    imageNode = SKSpriteNode(images: imageRefs.compactMap { return images[$0]?.contents as? NSImage })
+                #else
+                    imageNode = SKSpriteNode(images: imageRefs.compactMap { return images[$0]?.contents as? UIImage })
+                #endif
+                
                 nodeSize = imageNode.size
             }
 
