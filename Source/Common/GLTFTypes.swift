@@ -124,22 +124,26 @@ class Media: NSObject {
         switch self.kind {
         case .Photo(let data):
             #if SEEMS_TO_HAVE_PNG_LOADING_BUG
-            let magic: UInt64 = data.subdata(in: 0..<8).withUnsafeBytes { $0.pointee }
-            if magic == 0x0A1A0A0D474E5089 {
-                // PNG file
-                let cgDataProvider = CGDataProvider(data: data as CFData)
-                guard let cgImage = CGImage(pngDataProviderSource: cgDataProvider!, decode: nil, shouldInterpolate: false, intent: CGColorRenderingIntent.defaultIntent) else {
-                    print("loadImage error: cannot create CGImage")
-                    return nil
+            do {
+                let magic: UInt64 = try data.subdata(in: 0..<8).toUInt64()
+                if magic == 0x0A1A0A0D474E5089 {
+                    // PNG file
+                    let cgDataProvider = CGDataProvider(data: data as CFData)
+                    guard let cgImage = CGImage(pngDataProviderSource: cgDataProvider!, decode: nil, shouldInterpolate: false, intent: CGColorRenderingIntent.defaultIntent) else {
+                        print("loadImage error: cannot create CGImage")
+                        return nil
+                    }
+
+                    #if os(macOS)
+                    let imageSize = CGSize(width: cgImage.width, height: cgImage.height)
+                    self.contents = NSImage(cgImage: cgImage, size: imageSize)
+                    #else
+                    // FIXME: this workaround doesn't work for iOS...
+                    self.contents = UIImage(cgImage: cgImage)
+                    #endif
                 }
-                
-                #if os(macOS)
-                let imageSize = CGSize(width: cgImage.width, height: cgImage.height)
-                self.contents = NSImage(cgImage: cgImage, size: imageSize)
-                #else
-                // FIXME: this workaround doesn't work for iOS...
-                self.contents = UIImage(cgImage: cgImage)
-                #endif
+            } catch {
+                print("Error decoding photo: \(error)")
             }
             #endif
             #if os(macOS)
@@ -161,7 +165,7 @@ class Media: NSObject {
             }
 
             NotificationCenter.default.addObserver(forName: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil, queue: nil) { notification in
-                self.queuePlayer?.seek(to: kCMTimeZero)
+                self.queuePlayer?.seek(to: CMTime.zero)
                 self.queuePlayer?.play()
             }
 

@@ -75,7 +75,9 @@ public class GLTFSceneSource : SCNSceneSource {
                 failure?(UnexpectedResponseError(errorType: .noData))
                 return
             }
-            success(GLTFSceneSource(data: data))
+
+            let sceneSource = GLTFSceneSource(data: data)
+            success(sceneSource)
         }
         dataTask.resume()
         
