@@ -66,7 +66,12 @@ func createVertexArray(from source: SCNGeometrySource) throws -> [SCNVector3] {
     let dummy = SCNVector3()
     var vertices = [SCNVector3](repeating: dummy, count: source.vectorCount)
 
-    source.data.withUnsafeBytes { (p: UnsafePointer<Float32>) in
+    source.data.withUnsafeBytes { (rawBufferPointer: UnsafeRawBufferPointer) in
+        let unsafeBufferPointer = rawBufferPointer.bindMemory(to: Float32.self)
+        guard let p = unsafeBufferPointer.baseAddress else {
+            return
+        }
+
         var index = source.dataOffset / 4
         let step = source.dataStride / 4
         for i in 0..<source.vectorCount {
@@ -101,9 +106,13 @@ func createIndexArray(from element: SCNGeometryElement) -> [Int] {
             }
         }
     } else if element.bytesPerIndex == 4 {
-        element.data.withUnsafeBytes { (p: UnsafePointer<UInt32>) in
+        element.data.withUnsafeBytes { (rawBufferPointer: UnsafeRawBufferPointer) in
             //var index = 0
             //let step = 4
+            let unsafeBufferPointer = rawBufferPointer.bindMemory(to: UInt32.self)
+            guard let p = unsafeBufferPointer.baseAddress else {
+                return
+            }
             for i in 0..<indexCount {
                 //indices[i] = Int(p[index])
                 //index += step
@@ -111,9 +120,13 @@ func createIndexArray(from element: SCNGeometryElement) -> [Int] {
             }
         }
     } else if element.bytesPerIndex == 8 {
-        element.data.withUnsafeBytes { (p: UnsafePointer<UInt64>) in
+        element.data.withUnsafeBytes { (rawBufferPointer: UnsafeRawBufferPointer) in
             //var index = 0
             //let step = 8
+            let unsafeBufferPointer = rawBufferPointer.bindMemory(to: UInt64.self)
+            guard let p = unsafeBufferPointer.baseAddress else {
+                return
+            }
             for i in 0..<indexCount {
                 //indices[i] = Int(p[index])
                 //index += step

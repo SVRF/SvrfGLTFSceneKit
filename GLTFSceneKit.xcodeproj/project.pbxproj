@@ -56,6 +56,9 @@
 		8804EE2C22A5BFBF003926C7 /* ExtensionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2E982D1F4CF5B800D47C89 /* ExtensionList.swift */; };
 		8804EE2D22A5BFC7003926C7 /* GLTFKHRMaterialsCommon_GLTFKHRMaterialsCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2E98301F4CF6FA00D47C89 /* GLTFKHRMaterialsCommon_GLTFKHRMaterialsCommon.swift */; };
 		8804EE2E22A5BFCE003926C7 /* GLTFKHRMaterialsPbrSpecularGlossiness_GLTFKHRMaterialsPbrSpecularGlossiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9BFA7B1F9C0EBB00542D5B /* GLTFKHRMaterialsPbrSpecularGlossiness_GLTFKHRMaterialsPbrSpecularGlossiness.swift */; };
+		8807864422AEE49A00938A87 /* Data+Conversions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8807864322AEE49A00938A87 /* Data+Conversions.swift */; };
+		8807864522AEE49A00938A87 /* Data+Conversions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8807864322AEE49A00938A87 /* Data+Conversions.swift */; };
+		8807864622AEE49A00938A87 /* Data+Conversions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8807864322AEE49A00938A87 /* Data+Conversions.swift */; };
 		9DA74DB61FD5F8D9007F0749 /* GLTFShaderModifierSurface_alphaModeBlend.shader in Resources */ = {isa = PBXBuildFile; fileRef = 9DA74DB31FD5F54F007F0749 /* GLTFShaderModifierSurface_alphaModeBlend.shader */; };
 		9DA74DB71FD5FBAC007F0749 /* GLTFShaderModifierSurface_alphaModeBlend.shader in Resources */ = {isa = PBXBuildFile; fileRef = 9DA74DB31FD5F54F007F0749 /* GLTFShaderModifierSurface_alphaModeBlend.shader */; };
 		AC4768F022A5920500EF6B74 /* GLTFSVRFVideoTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4768EF22A5920500EF6B74 /* GLTFSVRFVideoTexture.swift */; };
@@ -231,6 +234,7 @@
 		8804EDF622A5B78F003926C7 /* SvrfViewportExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SvrfViewportExtensionTests.swift; sourceTree = "<group>"; };
 		8804EDFE22A5BB8A003926C7 /* SvrfViewportBindingExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SvrfViewportBindingExtension.swift; path = Source/Common/schema/extensions/SVRF_viewport/SvrfViewportBindingExtension.swift; sourceTree = SOURCE_ROOT; };
 		8804EE0222A5BF29003926C7 /* SKSpriteNode+ImageArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SKSpriteNode+ImageArray.swift"; sourceTree = "<group>"; };
+		8807864322AEE49A00938A87 /* Data+Conversions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Conversions.swift"; sourceTree = "<group>"; };
 		9DA74DB31FD5F54F007F0749 /* GLTFShaderModifierSurface_alphaModeBlend.shader */ = {isa = PBXFileReference; lastKnownFileType = text; path = GLTFShaderModifierSurface_alphaModeBlend.shader; sourceTree = "<group>"; };
 		AC4768EF22A5920500EF6B74 /* GLTFSVRFVideoTexture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GLTFSVRFVideoTexture.swift; path = Source/Common/schema/extensions/SVRF_video_texture/GLTFSVRFVideoTexture.swift; sourceTree = SOURCE_ROOT; };
 		DD071E031F55ED1200F00567 /* GLTFShaderModifierSurface.shader */ = {isa = PBXFileReference; lastKnownFileType = text; path = GLTFShaderModifierSurface.shader; sourceTree = "<group>"; };
@@ -471,6 +475,7 @@
 				DD1045991F47723D004B20CE /* GLTFTypes.swift */,
 				DD634F9C1F4A2D90008886AD /* GLTFFunctions.swift */,
 				DD10459B1F4772E3004B20CE /* GLTFErrors.swift */,
+				8807864322AEE49A00938A87 /* Data+Conversions.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -809,6 +814,7 @@
 				8804EE0A22A5BF84003926C7 /* GLTFAccessorSparseIndices.swift in Sources */,
 				8804EE1922A5BF84003926C7 /* GLTFGlTFChildOfRootProperty.swift in Sources */,
 				8804EE0722A5BF75003926C7 /* GLTFUnarchiver.swift in Sources */,
+				8807864622AEE49A00938A87 /* Data+Conversions.swift in Sources */,
 				8804EE1B22A5BF84003926C7 /* GLTFGlTFProperty.swift in Sources */,
 				8804EE2222A5BF84003926C7 /* GLTFMeshPrimitive.swift in Sources */,
 				8804EE0622A5BF5D003926C7 /* GLTFTypes.swift in Sources */,
@@ -860,6 +866,7 @@
 				DD3EB07C1F524783009F32D2 /* GLTFAccessorSparseValues.swift in Sources */,
 				DD3EB0911F524783009F32D2 /* GLTFMaterialPbrMetallicRoughness.swift in Sources */,
 				DD3EB09B1F52478C009F32D2 /* GLTFKHRMaterialsCommon_GLTFKHRMaterialsCommon.swift in Sources */,
+				8807864522AEE49A00938A87 /* Data+Conversions.swift in Sources */,
 				DD3EB09F1F524790009F32D2 /* GLTFFunctions.swift in Sources */,
 				DD3EB08F1F524783009F32D2 /* GLTFMaterialNormalTextureInfo.swift in Sources */,
 				DD3EB08A1F524783009F32D2 /* GLTFGlTFChildOfRootProperty.swift in Sources */,
@@ -911,6 +918,7 @@
 				DDE6FD7E1F466F3600CB11D6 /* GLTFSkin.swift in Sources */,
 				DD2E98311F4CF98600D47C89 /* GLTFKHRMaterialsCommon_GLTFKHRMaterialsCommon.swift in Sources */,
 				DDE6FD631F466F3600CB11D6 /* GLTFAccessorSparseValues.swift in Sources */,
+				8807864422AEE49A00938A87 /* Data+Conversions.swift in Sources */,
 				DDE6FD781F466F3600CB11D6 /* GLTFMaterialPbrMetallicRoughness.swift in Sources */,
 				DDE6FD761F466F3600CB11D6 /* GLTFMaterialNormalTextureInfo.swift in Sources */,
 				DDE6FD711F466F3600CB11D6 /* GLTFGlTFChildOfRootProperty.swift in Sources */,
