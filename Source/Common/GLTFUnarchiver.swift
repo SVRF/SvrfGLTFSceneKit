@@ -233,10 +233,12 @@ public class GLTFUnarchiver {
             guard let perspective = glCamera.perspective else {
                 throw GLTFUnarchiveError.DataInconsistent("loadCamera: perspective is not defined")
             }
-            camera.yFov = Double(perspective.yfov) * 180.0 / Double.pi
+            camera.fieldOfView = CGFloat(perspective.yfov * 180.0 / Float.pi)
+
             if let aspectRatio = perspective.aspectRatio {
-                camera.xFov = camera.yFov * Double(aspectRatio)
+                camera.fieldOfView = camera.fieldOfView * CGFloat(aspectRatio)
             }
+
             camera.zNear = Double(perspective.znear)
             camera.zFar = Double(perspective.zfar ?? Float.infinity)
             
@@ -1420,8 +1422,7 @@ public class GLTFUnarchiver {
         guard samplerIndex < glAnimation.samplers.count else {
             throw GLTFUnarchiveError.DataInconsistent("loadAnimation: out of index: sampler \(samplerIndex) < \(glAnimation.samplers.count)")
         }
-        let glSampler = glAnimation.samplers[samplerIndex]
-        
+
         var animation: CAAnimation
         if keyPath == "weights" {
             guard let weightPaths = weightPaths else {
@@ -1506,7 +1507,7 @@ public class GLTFUnarchiver {
         let glAccessor = accessors[index]
         
         let vectorCount = glAccessor.count
-        guard let usesFloatComponents = usesFloatComponentsMap[glAccessor.componentType] else {
+        guard let _ = usesFloatComponentsMap[glAccessor.componentType] else {
             throw GLTFUnarchiveError.NotSupported("loadInverseBindMatrices: user defined accessor.componentType is not supported")
         }
         guard glAccessor.type == "MAT4" else {
@@ -1601,7 +1602,7 @@ public class GLTFUnarchiver {
                 guard let _joints = primitive.geometry?.sources(for: .boneIndices) else {
                     throw GLTFUnarchiveError.DataInconsistent("loadSkin: JOINTS_0 is not defined")
                 }
-                var boneIndices = _joints[0]
+                let boneIndices = _joints[0]
                 print("boneIndices dataStride: \(boneIndices.dataStride)")
                 
                 #if SEEMS_TO_HAVE_SKINNER_VECTOR_TYPE_BUG
@@ -1702,10 +1703,6 @@ public class GLTFUnarchiver {
             scnNode.orientation = createVector4(glNode.rotation)
             scnNode.scale = createVector3(glNode.scale)
             scnNode.position = createVector3(glNode.translation)
-        }
-        
-        if let weights = glNode.weights {
-            // load weights
         }
         
         if let children = glNode.children {

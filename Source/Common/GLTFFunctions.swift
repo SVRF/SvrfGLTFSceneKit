@@ -65,7 +65,7 @@ func createVertexArray(from source: SCNGeometrySource) throws -> [SCNVector3] {
     
     let dummy = SCNVector3()
     var vertices = [SCNVector3](repeating: dummy, count: source.vectorCount)
-    
+
     source.data.withUnsafeBytes { (p: UnsafePointer<Float32>) in
         var index = source.dataOffset / 4
         let step = source.dataStride / 4
@@ -86,9 +86,14 @@ func createIndexArray(from element: SCNGeometryElement) -> [Int] {
     var indices = [Int]()
     indices.reserveCapacity(indexCount)
     if element.bytesPerIndex == 2 {
-        element.data.withUnsafeBytes { (p: UnsafePointer<UInt16>) in
+        element.data.withUnsafeBytes { (rawBufferPointer: UnsafeRawBufferPointer) in
             //var index = 0
             //let step = 2
+            let unsafeBufferPointer = rawBufferPointer.bindMemory(to: UInt16.self)
+            guard let p = unsafeBufferPointer.baseAddress else {
+                return
+            }
+
             for i in 0..<indexCount {
                 //indices[i] = Int(p[index])
                 //index += step
