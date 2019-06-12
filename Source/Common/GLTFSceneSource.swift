@@ -116,8 +116,8 @@ public class GLTFSceneSource : SCNSceneSource {
         #endif
     }
     
-    public func sceneOverlay(view: SCNView) -> SKScene? {
-        return self.loader.loadSceneOverlay(scnView: view)
+    public func sceneOverlay() -> SvrfSceneOverlay? {
+        return self.loader.loadSceneOverlay()
     }
 
     /*

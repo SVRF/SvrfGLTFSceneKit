@@ -1750,61 +1750,42 @@ public class GLTFUnarchiver {
         return try self.loadScene(index: 0)
     }
     
-    func loadSceneOverlay(scnView: SCNView) -> SKScene? {
+    func loadSceneOverlay() -> SvrfSceneOverlay? {
         guard let sceneOverlayModel = overlayModel else {
             return nil
         }
 
-        let skScene = SKScene(size: scnView.frame.size)
-        if let imageRefs = sceneOverlayModel.images {
-            let imageNode: SKSpriteNode
-            let nodeSize: CGSize
+        guard let imageRefs = sceneOverlayModel.images else {
+            return nil
+        }
+        let imageNode: SKSpriteNode
+        let nodeSize: CGSize
 
-            if (images.count == 1) {
-                let image = self.images[imageRefs[0]]!
-                #if os(macOS)
-                    let texture = SKTexture(image: image.contents as! NSImage)
-                #else
-                    let texture = SKTexture(image: image.contents as! UIImage)
-                #endif
-                
-                imageNode = SKSpriteNode(texture: texture)
-                nodeSize = texture.size()
-            } else {
-                #if os(macOS)
-                    imageNode = SKSpriteNode(images: imageRefs.compactMap { return images[$0]?.contents as? NSImage })
-                #else
-                    imageNode = SKSpriteNode(images: imageRefs.compactMap { return images[$0]?.contents as? UIImage })
-                #endif
-                
-                nodeSize = imageNode.size
-            }
+        if (images.count == 1) {
+            let image = self.images[imageRefs[0]]!
+            #if os(macOS)
+            let texture = SKTexture(image: image.contents as! NSImage)
+            #else
+            let texture = SKTexture(image: image.contents as! UIImage)
+            #endif
 
-            var x: CGFloat
-            var y: CGFloat
-            switch sceneOverlayModel.halign ?? .center {
-            case .center: x = scnView.frame.size.width/2
-            case .left: x = nodeSize.width/2
-            case .right: x = scnView.frame.size.width - (nodeSize.width/2)
-            }
-            if let hoffset = sceneOverlayModel.hoffset {
-                x += hoffset*scnView.frame.size.width
-            }
+            imageNode = SKSpriteNode(texture: texture)
+            nodeSize = texture.size()
+        } else {
+            #if os(macOS)
+            imageNode = SKSpriteNode(images: imageRefs.compactMap { return images[$0]?.contents as? NSImage })
+            #else
+            imageNode = SKSpriteNode(images: imageRefs.compactMap { return images[$0]?.contents as? UIImage })
+            #endif
 
-            switch sceneOverlayModel.valign ?? .center {
-            case .center: y = scnView.frame.size.height/2
-            case .bottom: y = nodeSize.height/2
-            case .top: y = scnView.frame.size.height - (nodeSize.height/2)
-            }
-            if let voffset = sceneOverlayModel.voffset {
-                y += voffset*scnView.frame.size.height
-            }
-
-            imageNode.position = CGPoint(x: x, y: y)
-            skScene.addChild(imageNode)
+            nodeSize = imageNode.size
         }
 
-        return skScene
+        return SvrfSceneOverlay(image: imageNode,
+                                halign: overlayModel?.halign,
+                                hoffset: overlayModel?.hoffset,
+                                valign: overlayModel?.valign,
+                                voffset: overlayModel?.voffset)
     }
     
     private func loadScene(index: Int) throws -> SCNScene {
