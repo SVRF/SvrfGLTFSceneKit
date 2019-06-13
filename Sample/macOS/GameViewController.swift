@@ -84,7 +84,7 @@ class GameViewController: NSViewController {
             if let cameraNode = change[.newKey] as? SCNNode {
                 // It must use the main thread to change the UI.
                 DispatchQueue.main.async {
-                    if let index = self.cameraNodes.index(of: cameraNode) {
+                    if let index = self.cameraNodes.firstIndex(of: cameraNode) {
                         self.cameraSelect.selectItem(at: index)
                     } else {
                         self.cameraSelect.selectItem(withTag: self.defaultCameraTag)
