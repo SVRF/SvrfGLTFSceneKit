@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = "SvrfGLTFSceneKit"
-  s.version = "1.2.1"
+  s.version = "1.2.2"
   s.summary = "SvrfGLTF loader for SceneKit"
   s.homepage = "https://github.com/SVRF/SvrfGLTFSceneKit"
   s.license = "MIT"
@@ -13,7 +13,6 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.swift_version = "5.0"
   s.pod_target_xcconfig = {
-    "SWIFT_VERSION" => "4.0",
     "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "SEEMS_TO_HAVE_VALIDATE_VERTEX_ATTRIBUTE_BUG SEEMS_TO_HAVE_PNG_LOADING_BUG"
   }
 end
