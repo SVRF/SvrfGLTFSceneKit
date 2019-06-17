@@ -21,7 +21,9 @@ let glbMagic = 0x46546C67 // "glTF"
 let chunkTypeJSON = 0x4E4F534A // "JSON"
 let chunkTypeBIN = 0x004E4942 // "BIN"
 
-
+public protocol GLTFAnimationManager: CAAnimationDelegate {
+    func addAnimation(_ animation: CAAnimation, node: SCNNode)
+}
 
 public class GLTFUnarchiver {
     private var directoryPath: URL? = nil
@@ -46,6 +48,7 @@ public class GLTFUnarchiver {
     private var textures: [SCNMaterialProperty?] = []
     private var images: [Media?] = []
     private var maxAnimationDuration: CFTimeInterval = 0.0
+    private var animationManager: GLTFAnimationManager? = nil
     
     #if !os(watchOS)
         private var workingAnimationGroup: CAAnimationGroup! = nil
@@ -70,10 +73,11 @@ public class GLTFUnarchiver {
         self.directoryPath = url.deletingLastPathComponent()
     }
     
-    public init(data: Data, extensions: [String:Codable.Type]? = nil) throws {
+    public init(data: Data, animationManager: GLTFAnimationManager? = nil, extensions: [String:Codable.Type]? = nil) throws {
         let decoder = JSONDecoder()
         var _extensions = extensionList
         extensions?.forEach { (ext) in _extensions[ext.key] = ext.value }
+        self.animationManager = animationManager
         
         decoder.userInfo[GLTFExtensionCodingUserInfoKey] = _extensions
         var jsonData = data
@@ -1314,15 +1318,17 @@ public class GLTFUnarchiver {
             
         animation.keyTimes = keyTimes
         animation.values = values
-        animation.repeatCount = .infinity
+        animation.repeatCount = 1
+        animation.delegate = animationManager
         animation.duration = duration
         //animation.timingFunctions = timingFunctions
         
         let group = CAAnimationGroup()
         group.animations = [animation]
         group.duration = self.maxAnimationDuration
-        group.repeatCount = .infinity
-        
+        group.repeatCount = 1
+        group.delegate = animationManager
+
         self.animationSamplers[index]![sampler] = group
         
         return group
@@ -1371,7 +1377,8 @@ public class GLTFUnarchiver {
             animations.append(animation)
         }
         group.animations = animations
-        group.repeatCount = .infinity
+        group.delegate = animationManager
+        group.repeatCount = 1
         
         if keyTimes.count == values.count {
             for i in 0..<animations.count {
@@ -1482,6 +1489,7 @@ public class GLTFUnarchiver {
                 if channel.target.node == index {
                     let animation = try self.loadAnimation(index: i, channel: j, weightPaths: weightPaths)
                     node.addAnimation(animation, forKey: nil)
+                    animationManager?.addAnimation(animation, node: node)
                 }
             }
         }
@@ -1742,61 +1750,38 @@ public class GLTFUnarchiver {
         return try self.loadScene(index: 0)
     }
     
-    func loadSceneOverlay(scnView: SCNView) -> SKScene? {
+    func loadSceneOverlay() -> SvrfSceneOverlay? {
         guard let sceneOverlayModel = overlayModel else {
             return nil
         }
 
-        let skScene = SKScene(size: scnView.frame.size)
-        if let imageRefs = sceneOverlayModel.images {
-            let imageNode: SKSpriteNode
-            let nodeSize: CGSize
+        guard let imageRefs = sceneOverlayModel.images else {
+            return nil
+        }
+        let imageNode: SKSpriteNode
 
-            if (images.count == 1) {
-                let image = self.images[imageRefs[0]]!
-                #if os(macOS)
-                    let texture = SKTexture(image: image.contents as! NSImage)
-                #else
-                    let texture = SKTexture(image: image.contents as! UIImage)
-                #endif
-                
-                imageNode = SKSpriteNode(texture: texture)
-                nodeSize = texture.size()
-            } else {
-                #if os(macOS)
-                    imageNode = SKSpriteNode(images: imageRefs.compactMap { return images[$0]?.contents as? NSImage })
-                #else
-                    imageNode = SKSpriteNode(images: imageRefs.compactMap { return images[$0]?.contents as? UIImage })
-                #endif
-                
-                nodeSize = imageNode.size
-            }
+        if (images.count == 1) {
+            let image = self.images[imageRefs[0]]!
+            #if os(macOS)
+            let texture = SKTexture(image: image.contents as! NSImage)
+            #else
+            let texture = SKTexture(image: image.contents as! UIImage)
+            #endif
 
-            var x: CGFloat
-            var y: CGFloat
-            switch sceneOverlayModel.halign ?? .center {
-            case .center: x = scnView.frame.size.width/2
-            case .left: x = nodeSize.width/2
-            case .right: x = scnView.frame.size.width - (nodeSize.width/2)
-            }
-            if let hoffset = sceneOverlayModel.hoffset {
-                x += hoffset*scnView.frame.size.width
-            }
-
-            switch sceneOverlayModel.valign ?? .center {
-            case .center: y = scnView.frame.size.height/2
-            case .bottom: y = nodeSize.height/2
-            case .top: y = scnView.frame.size.height - (nodeSize.height/2)
-            }
-            if let voffset = sceneOverlayModel.voffset {
-                y += voffset*scnView.frame.size.height
-            }
-
-            imageNode.position = CGPoint(x: x, y: y)
-            skScene.addChild(imageNode)
+            imageNode = SKSpriteNode(texture: texture)
+        } else {
+            #if os(macOS)
+            imageNode = SKSpriteNode(images: imageRefs.compactMap { return images[$0]?.contents as? NSImage })
+            #else
+            imageNode = SKSpriteNode(images: imageRefs.compactMap { return images[$0]?.contents as? UIImage })
+            #endif
         }
 
-        return skScene
+        return SvrfSceneOverlay(image: imageNode,
+                                halign: overlayModel?.halign,
+                                hoffset: overlayModel?.hoffset,
+                                valign: overlayModel?.valign,
+                                voffset: overlayModel?.voffset)
     }
     
     private func loadScene(index: Int) throws -> SCNScene {

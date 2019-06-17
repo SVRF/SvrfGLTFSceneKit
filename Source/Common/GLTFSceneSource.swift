@@ -39,6 +39,7 @@ public class GLTFSceneSource : SCNSceneSource {
     }
     
     public static func load(remoteURL: URL,
+                            animationManager: GLTFAnimationManager? = nil,
                             onSuccess success: @escaping (_ sceneSource: GLTFSceneSource) -> Void,
                             onFailure failure: Optional<(_ error: Error) -> Void> = nil,
                             extensions: [String:Codable.Type]? = nil) -> URLSessionDataTask {
@@ -76,7 +77,7 @@ public class GLTFSceneSource : SCNSceneSource {
                 return
             }
 
-            let sceneSource = GLTFSceneSource(data: data)
+            let sceneSource = GLTFSceneSource(data: data, animationManager: animationManager)
             success(sceneSource)
         }
         dataTask.resume()
@@ -84,10 +85,12 @@ public class GLTFSceneSource : SCNSceneSource {
         return dataTask
     }
 
-    public override convenience init(data: Data, options: [SCNSceneSource.LoadingOption : Any]? = nil) {
+    public convenience init(data: Data,
+                            animationManager: GLTFAnimationManager? = nil,
+                            options: [SCNSceneSource.LoadingOption : Any]? = nil) {
         self.init()
         do {
-            self.loader = try GLTFUnarchiver(data: data)
+            self.loader = try GLTFUnarchiver(data: data, animationManager: animationManager)
         } catch {
             print("\(error.localizedDescription)")
         }
@@ -113,8 +116,8 @@ public class GLTFSceneSource : SCNSceneSource {
         #endif
     }
     
-    public func sceneOverlay(view: SCNView) -> SKScene? {
-        return self.loader.loadSceneOverlay(scnView: view)
+    public func sceneOverlay() -> SvrfSceneOverlay? {
+        return self.loader.loadSceneOverlay()
     }
 
     /*
