@@ -3,11 +3,22 @@
 //  SvrfGLTFSceneKit
 //
 //  Created by Jesse Boyes on 6/12/19.
+//  Copyright © 2019 Svrf. All rights reserved.
 //
 
 import Foundation
 import SpriteKit
 
+/**
+ This class represents data from the `GLTF Viewport Extension` in the form of a
+ `SKScene` for use as a `SCNScene`'s `overlaySKScene`.
+
+ Usage:
+ - Retrieve this object from the `GLTFUnarchiver` via `loadSceneOverlay()`
+ - Set as your `SKSceneView`'s `overlaySKScene`
+ - Update the `size` of the overlay to the size of your view.
+
+ */
 public class SvrfSceneOverlay: SKScene {
     private var imageNode: SKNode?
     private var halign: SvrfHorizontalAlignment?
@@ -51,6 +62,8 @@ public class SvrfSceneOverlay: SKScene {
         super.didMove(to: view)
         layoutImage()
     }
+
+    // MARK: - Private methods
 
     private func layoutImage() {
         guard let imageNode = imageNode else {
