@@ -9,9 +9,6 @@
 /* Begin PBXBuildFile section */
 		8804EDF022A5B6AF003926C7 /* GLTFSceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD3EB0711F52476B009F32D2 /* GLTFSceneKit.framework */; };
 		8804EDF722A5B78F003926C7 /* SvrfViewportExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8804EDF622A5B78F003926C7 /* SvrfViewportExtensionTests.swift */; };
-		8804EDFF22A5BB8A003926C7 /* SvrfViewportBindingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8804EDFE22A5BB8A003926C7 /* SvrfViewportBindingExtension.swift */; };
-		8804EE0022A5BB8A003926C7 /* SvrfViewportBindingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8804EDFE22A5BB8A003926C7 /* SvrfViewportBindingExtension.swift */; };
-		8804EE0122A5BE9C003926C7 /* SvrfViewportBindingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8804EDFE22A5BB8A003926C7 /* SvrfViewportBindingExtension.swift */; };
 		8804EE0322A5BF29003926C7 /* SKSpriteNode+ImageArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8804EE0222A5BF29003926C7 /* SKSpriteNode+ImageArray.swift */; };
 		8804EE0422A5BF29003926C7 /* SKSpriteNode+ImageArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8804EE0222A5BF29003926C7 /* SKSpriteNode+ImageArray.swift */; };
 		8804EE0522A5BF29003926C7 /* SKSpriteNode+ImageArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8804EE0222A5BF29003926C7 /* SKSpriteNode+ImageArray.swift */; };
@@ -61,6 +58,10 @@
 		88DA841B22B830460050D160 /* SvrfSceneOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DA841A22B830460050D160 /* SvrfSceneOverlay.swift */; };
 		88DA841C22B830460050D160 /* SvrfSceneOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DA841A22B830460050D160 /* SvrfSceneOverlay.swift */; };
 		88DA841D22B830460050D160 /* SvrfSceneOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DA841A22B830460050D160 /* SvrfSceneOverlay.swift */; };
+		88DA841F22B834D30050D160 /* GLTFSVRFVideoTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4768EF22A5920500EF6B74 /* GLTFSVRFVideoTexture.swift */; };
+		88DA842222B835C30050D160 /* SvrfViewportBindingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DA842122B835C30050D160 /* SvrfViewportBindingExtension.swift */; };
+		88DA842322B835FD0050D160 /* SvrfViewportBindingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DA842122B835C30050D160 /* SvrfViewportBindingExtension.swift */; };
+		88DA842422B836020050D160 /* SvrfViewportBindingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DA842122B835C30050D160 /* SvrfViewportBindingExtension.swift */; };
 		9DA74DB61FD5F8D9007F0749 /* GLTFShaderModifierSurface_alphaModeBlend.shader in Resources */ = {isa = PBXBuildFile; fileRef = 9DA74DB31FD5F54F007F0749 /* GLTFShaderModifierSurface_alphaModeBlend.shader */; };
 		9DA74DB71FD5FBAC007F0749 /* GLTFShaderModifierSurface_alphaModeBlend.shader in Resources */ = {isa = PBXBuildFile; fileRef = 9DA74DB31FD5F54F007F0749 /* GLTFShaderModifierSurface_alphaModeBlend.shader */; };
 		AC4768F022A5920500EF6B74 /* GLTFSVRFVideoTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4768EF22A5920500EF6B74 /* GLTFSVRFVideoTexture.swift */; };
@@ -258,8 +259,6 @@
 		ECB9F81A22B27FAE00369F43 /* GLTFFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD634F9C1F4A2D90008886AD /* GLTFFunctions.swift */; };
 		ECB9F81B22B27FB000369F43 /* GLTFErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD10459B1F4772E3004B20CE /* GLTFErrors.swift */; };
 		ECB9F81C22B27FB100369F43 /* GLTFErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD10459B1F4772E3004B20CE /* GLTFErrors.swift */; };
-		ECB9F81D22B2844D00369F43 /* SvrfViewportBindingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8804EDFE22A5BB8A003926C7 /* SvrfViewportBindingExtension.swift */; };
-		ECB9F81E22B2844E00369F43 /* SvrfViewportBindingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8804EDFE22A5BB8A003926C7 /* SvrfViewportBindingExtension.swift */; };
 		ECB9F81F22B2869D00369F43 /* ExtensionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2E982D1F4CF5B800D47C89 /* ExtensionList.swift */; };
 		ECB9F82022B2869D00369F43 /* ExtensionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2E982D1F4CF5B800D47C89 /* ExtensionList.swift */; };
 		ECB9F82122B286AF00369F43 /* GLTFKHRMaterialsCommon_GLTFKHRMaterialsCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2E98301F4CF6FA00D47C89 /* GLTFKHRMaterialsCommon_GLTFKHRMaterialsCommon.swift */; };
@@ -321,10 +320,10 @@
 		8804EDEB22A5B6AF003926C7 /* GLTFSceneKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GLTFSceneKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8804EDEF22A5B6AF003926C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8804EDF622A5B78F003926C7 /* SvrfViewportExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SvrfViewportExtensionTests.swift; sourceTree = "<group>"; };
-		8804EDFE22A5BB8A003926C7 /* SvrfViewportBindingExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SvrfViewportBindingExtension.swift; path = Source/Common/schema/extensions/SVRF_viewport/SvrfViewportBindingExtension.swift; sourceTree = SOURCE_ROOT; };
 		8804EE0222A5BF29003926C7 /* SKSpriteNode+ImageArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SKSpriteNode+ImageArray.swift"; sourceTree = "<group>"; };
 		8807864322AEE49A00938A87 /* Data+Conversions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Conversions.swift"; sourceTree = "<group>"; };
 		88DA841A22B830460050D160 /* SvrfSceneOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SvrfSceneOverlay.swift; sourceTree = "<group>"; };
+		88DA842122B835C30050D160 /* SvrfViewportBindingExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SvrfViewportBindingExtension.swift; path = SVRF_viewport/SvrfViewportBindingExtension.swift; sourceTree = "<group>"; };
 		9DA74DB31FD5F54F007F0749 /* GLTFShaderModifierSurface_alphaModeBlend.shader */ = {isa = PBXFileReference; lastKnownFileType = text; path = GLTFShaderModifierSurface_alphaModeBlend.shader; sourceTree = "<group>"; };
 		AC4768EF22A5920500EF6B74 /* GLTFSVRFVideoTexture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GLTFSVRFVideoTexture.swift; path = Source/Common/schema/extensions/SVRF_video_texture/GLTFSVRFVideoTexture.swift; sourceTree = SOURCE_ROOT; };
 		DD071E031F55ED1200F00567 /* GLTFShaderModifierSurface.shader */ = {isa = PBXFileReference; lastKnownFileType = text; path = GLTFShaderModifierSurface.shader; sourceTree = "<group>"; };
@@ -449,6 +448,14 @@
 			path = GLTFSceneKitTests;
 			sourceTree = "<group>";
 		};
+		88DA842022B834FE0050D160 /* SVRF_viewport_binding */ = {
+			isa = PBXGroup;
+			children = (
+				88DA842122B835C30050D160 /* SvrfViewportBindingExtension.swift */,
+			);
+			name = SVRF_viewport_binding;
+			sourceTree = "<group>";
+		};
 		AC4768EE22A5920500EF6B74 /* SVRF_video_texture */ = {
 			isa = PBXGroup;
 			children = (
@@ -462,7 +469,7 @@
 			children = (
 				DD2E982D1F4CF5B800D47C89 /* ExtensionList.swift */,
 				AC4768EE22A5920500EF6B74 /* SVRF_video_texture */,
-				8804EDFE22A5BB8A003926C7 /* SvrfViewportBindingExtension.swift */,
+				88DA842022B834FE0050D160 /* SVRF_viewport_binding */,
 				DD2E982F1F4CF6FA00D47C89 /* KHR_materials_common */,
 				DD9BFA7A1F9C0EBB00542D5B /* KHR_materials_pbrSpecularGlossiness */,
 			);
@@ -894,6 +901,7 @@
 				8804EE2B22A5BF98003926C7 /* GLTFErrors.swift in Sources */,
 				8804EE2722A5BF84003926C7 /* GLTFTexture.swift in Sources */,
 				8804EE0522A5BF29003926C7 /* SKSpriteNode+ImageArray.swift in Sources */,
+				88DA842322B835FD0050D160 /* SvrfViewportBindingExtension.swift in Sources */,
 				8804EE2122A5BF84003926C7 /* GLTFMesh.swift in Sources */,
 				8804EE2522A5BF84003926C7 /* GLTFScene.swift in Sources */,
 				8804EE1122A5BF84003926C7 /* GLTFBuffer.swift in Sources */,
@@ -905,6 +913,7 @@
 				8804EE1922A5BF84003926C7 /* GLTFGlTFChildOfRootProperty.swift in Sources */,
 				8804EE0722A5BF75003926C7 /* GLTFUnarchiver.swift in Sources */,
 				8807864622AEE49A00938A87 /* Data+Conversions.swift in Sources */,
+				88DA841F22B834D30050D160 /* GLTFSVRFVideoTexture.swift in Sources */,
 				8804EE1B22A5BF84003926C7 /* GLTFGlTFProperty.swift in Sources */,
 				8804EE2222A5BF84003926C7 /* GLTFMeshPrimitive.swift in Sources */,
 				ECB9F7FA22B27F8200369F43 /* GLTFNode.swift in Sources */,
@@ -925,7 +934,6 @@
 				8804EE2A22A5BF98003926C7 /* GLTFFunctions.swift in Sources */,
 				8804EE1522A5BF84003926C7 /* GLTFCameraPerspective.swift in Sources */,
 				8804EE1422A5BF84003926C7 /* GLTFCameraOrthographic.swift in Sources */,
-				8804EE0122A5BE9C003926C7 /* SvrfViewportBindingExtension.swift in Sources */,
 				8804EE2422A5BF84003926C7 /* GLTFSampler.swift in Sources */,
 				8804EE1222A5BF84003926C7 /* GLTFBufferView.swift in Sources */,
 				8804EE0D22A5BF84003926C7 /* GLTFAnimationChannel.swift in Sources */,
@@ -971,10 +979,10 @@
 				DD3EB08E1F524783009F32D2 /* GLTFMaterial.swift in Sources */,
 				DD3EB0811F524783009F32D2 /* GLTFAsset.swift in Sources */,
 				88DA841C22B830460050D160 /* SvrfSceneOverlay.swift in Sources */,
-				8804EE0022A5BB8A003926C7 /* SvrfViewportBindingExtension.swift in Sources */,
 				DD3EB0801F524783009F32D2 /* GLTFAnimationSampler.swift in Sources */,
 				DD3EB0951F524783009F32D2 /* GLTFSampler.swift in Sources */,
 				DD3EB0851F524783009F32D2 /* GLTFCameraOrthographic.swift in Sources */,
+				88DA842422B836020050D160 /* SvrfViewportBindingExtension.swift in Sources */,
 				DD3EB0831F524783009F32D2 /* GLTFBufferView.swift in Sources */,
 				AC4768F122A5920500EF6B74 /* GLTFSVRFVideoTexture.swift in Sources */,
 				DD3EB0921F524783009F32D2 /* GLTFMesh.swift in Sources */,
@@ -1024,10 +1032,10 @@
 				DDE6FD671F466F3600CB11D6 /* GLTFAnimationSampler.swift in Sources */,
 				DDE6FD7C1F466F3600CB11D6 /* GLTFSampler.swift in Sources */,
 				88DA841B22B830460050D160 /* SvrfSceneOverlay.swift in Sources */,
-				8804EDFF22A5BB8A003926C7 /* SvrfViewportBindingExtension.swift in Sources */,
 				DDE6FD6C1F466F3600CB11D6 /* GLTFCameraOrthographic.swift in Sources */,
 				DD634F9D1F4A2D90008886AD /* GLTFFunctions.swift in Sources */,
 				DDE6FD6A1F466F3600CB11D6 /* GLTFBufferView.swift in Sources */,
+				88DA842222B835C30050D160 /* SvrfViewportBindingExtension.swift in Sources */,
 				DDE6FD821F466F9B00CB11D6 /* GLTFUnarchiver.swift in Sources */,
 				AC4768F022A5920500EF6B74 /* GLTFSVRFVideoTexture.swift in Sources */,
 				DDE6FD791F466F3600CB11D6 /* GLTFMesh.swift in Sources */,
@@ -1058,7 +1066,6 @@
 				ECB9F7C322B27F2B00369F43 /* GLTFAccessor.swift in Sources */,
 				ECB9F7D722B27F5C00369F43 /* GLTFBufferView.swift in Sources */,
 				ECB9F82322B286B300369F43 /* GLTFKHRMaterialsPbrSpecularGlossiness_GLTFKHRMaterialsPbrSpecularGlossiness.swift in Sources */,
-				ECB9F81D22B2844D00369F43 /* SvrfViewportBindingExtension.swift in Sources */,
 				ECB9F7D322B27F5800369F43 /* GLTFAsset.swift in Sources */,
 				ECB9F7C922B27F4A00369F43 /* GLTFAccessorSparseValues.swift in Sources */,
 				ECB9F7CB22B27F4F00369F43 /* GLTFAnimation.swift in Sources */,
@@ -1114,7 +1121,6 @@
 				ECB9F7D222B27F5700369F43 /* GLTFAsset.swift in Sources */,
 				ECB9F81C22B27FB100369F43 /* GLTFErrors.swift in Sources */,
 				DDE6FDC91F4671C400CB11D6 /* AppDelegate.swift in Sources */,
-				ECB9F81E22B2844E00369F43 /* SvrfViewportBindingExtension.swift in Sources */,
 				ECB9F7E022B27F6600369F43 /* GLTFExtras.swift in Sources */,
 				ECB9F7D422B27F5900369F43 /* GLTFBuffer.swift in Sources */,
 				ECB9F7DC22B27F6200369F43 /* GLTFCameraPerspective.swift in Sources */,

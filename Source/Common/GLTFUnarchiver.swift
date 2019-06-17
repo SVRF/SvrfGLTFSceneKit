@@ -1759,7 +1759,6 @@ public class GLTFUnarchiver {
             return nil
         }
         let imageNode: SKSpriteNode
-        let nodeSize: CGSize
 
         if (images.count == 1) {
             let image = self.images[imageRefs[0]]!
@@ -1770,15 +1769,12 @@ public class GLTFUnarchiver {
             #endif
 
             imageNode = SKSpriteNode(texture: texture)
-            nodeSize = texture.size()
         } else {
             #if os(macOS)
             imageNode = SKSpriteNode(images: imageRefs.compactMap { return images[$0]?.contents as? NSImage })
             #else
             imageNode = SKSpriteNode(images: imageRefs.compactMap { return images[$0]?.contents as? UIImage })
             #endif
-
-            nodeSize = imageNode.size
         }
 
         return SvrfSceneOverlay(image: imageNode,
