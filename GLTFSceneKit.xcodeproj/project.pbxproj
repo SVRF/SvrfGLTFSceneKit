@@ -180,6 +180,10 @@
 		DDE6FDD41F4675CB00CB11D6 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE6FDAC1F46716B00CB11D6 /* GameViewController.swift */; };
 		DDE6FDD61F46764500CB11D6 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDE6FDAA1F46716B00CB11D6 /* MainMenu.xib */; };
 		DDE6FDDA1F46785100CB11D6 /* GLTFSceneSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE6FDD91F46785100CB11D6 /* GLTFSceneSource.swift */; };
+		EC23EC22230AA62200489184 /* SvrfViewportBindingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DA842122B835C30050D160 /* SvrfViewportBindingExtension.swift */; };
+		EC23EC23230AA62200489184 /* SvrfViewportBindingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DA842122B835C30050D160 /* SvrfViewportBindingExtension.swift */; };
+		EC23EC24230AA62800489184 /* SvrfSceneOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DA841A22B830460050D160 /* SvrfSceneOverlay.swift */; };
+		EC23EC25230AA62800489184 /* SvrfSceneOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DA841A22B830460050D160 /* SvrfSceneOverlay.swift */; };
 		ECB9F7C222B27F2B00369F43 /* GLTFAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE6FD5D1F466F2000CB11D6 /* GLTFAccessor.swift */; };
 		ECB9F7C322B27F2B00369F43 /* GLTFAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE6FD5D1F466F2000CB11D6 /* GLTFAccessor.swift */; };
 		ECB9F7C422B27F4600369F43 /* GLTFAccessorSparse.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE6FD5E1F466F2000CB11D6 /* GLTFAccessorSparse.swift */; };
@@ -1088,6 +1092,8 @@
 				ECB9F81922B27FAE00369F43 /* GLTFFunctions.swift in Sources */,
 				ECB9F80522B27F8E00369F43 /* GLTFUnarchiver.swift in Sources */,
 				ECB9F7E322B27F6800369F43 /* GLTFGlTF.swift in Sources */,
+				EC23EC22230AA62200489184 /* SvrfViewportBindingExtension.swift in Sources */,
+				EC23EC24230AA62800489184 /* SvrfSceneOverlay.swift in Sources */,
 				ECB9F7F322B27F7900369F43 /* GLTFMaterialPbrMetallicRoughness.swift in Sources */,
 				ECB9F7DF22B27F6500369F43 /* GLTFExtension.swift in Sources */,
 				ECB9F7F722B27F7E00369F43 /* GLTFMeshPrimitive.swift in Sources */,
@@ -1108,11 +1114,13 @@
 			files = (
 				ECB9F81322B27F9E00369F43 /* SKSpriteNode+ImageArray.swift in Sources */,
 				ECB9F82022B2869D00369F43 /* ExtensionList.swift in Sources */,
+				EC23EC25230AA62800489184 /* SvrfSceneOverlay.swift in Sources */,
 				ECB9F7E822B27F6E00369F43 /* GLTFGlTFProperty.swift in Sources */,
 				ECB9F7F622B27F7D00369F43 /* GLTFMeshPrimitive.swift in Sources */,
 				ECB9F80122B27F8A00369F43 /* GLTFTexture.swift in Sources */,
 				ECB9F7C222B27F2B00369F43 /* GLTFAccessor.swift in Sources */,
 				ECB9F7D822B27F5E00369F43 /* GLTFCamera.swift in Sources */,
+				EC23EC23230AA62200489184 /* SvrfViewportBindingExtension.swift in Sources */,
 				ECB9F7F422B27F7B00369F43 /* GLTFMesh.swift in Sources */,
 				ECB9F7EC22B27F7200369F43 /* GLTFMaterial.swift in Sources */,
 				ECB9F7C422B27F4600369F43 /* GLTFAccessorSparse.swift in Sources */,
