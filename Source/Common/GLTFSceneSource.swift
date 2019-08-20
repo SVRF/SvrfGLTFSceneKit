@@ -12,6 +12,11 @@ import SpriteKit
 @objcMembers
 public class GLTFSceneSource : SCNSceneSource {
     private var loader: GLTFUnarchiver! = nil
+    public var loaded: Bool {
+        get {
+            return self.loader != nil
+        }
+    }
     
     public override init() {
         super.init()
@@ -105,6 +110,10 @@ public class GLTFSceneSource : SCNSceneSource {
     }
     
     public override func scene(options: [SCNSceneSource.LoadingOption : Any]? = nil) throws -> SCNScene {
+        guard self.loaded else {
+            throw GLTFLoadingError.LoaderNotInitialized
+        }
+
         let scene = try self.loader.loadScene()
         #if SEEMS_TO_HAVE_SKINNER_VECTOR_TYPE_BUG
             let sceneData = NSKeyedArchiver.archivedData(withRootObject: scene)

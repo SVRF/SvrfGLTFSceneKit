@@ -8,6 +8,10 @@
 
 import Foundation
 
+public enum GLTFLoadingError: Error {
+    case LoaderNotInitialized
+}
+
 public enum GLTFUnarchiveError: Error {
     case DataInconsistent(String)
     case NotSupported(String)
