@@ -17,7 +17,7 @@ public class GLTFSceneSource : SCNSceneSource {
             return self.loader != nil
         }
     }
-    
+
     public override init() {
         super.init()
     }
@@ -58,7 +58,7 @@ public class GLTFSceneSource : SCNSceneSource {
             
             let errorType: ErrorType
         }
-
+        
         let dataTask = URLSession.shared.dataTask(with: remoteURL) { data, response, error in
             // Handle various error cases
             if let error = error {
@@ -82,7 +82,8 @@ public class GLTFSceneSource : SCNSceneSource {
                 return
             }
 
-            let sceneSource = GLTFSceneSource(data: data, animationManager: animationManager)
+            let directoryPath = httpResponse.url?.deletingLastPathComponent()
+            let sceneSource = GLTFSceneSource(data: data, withDirectoryPath: directoryPath, animationManager: animationManager)
             success(sceneSource)
         }
         dataTask.resume()
@@ -91,11 +92,12 @@ public class GLTFSceneSource : SCNSceneSource {
     }
 
     public convenience init(data: Data,
+                            withDirectoryPath directoryPath: URL? = nil,
                             animationManager: GLTFAnimationManager? = nil,
                             options: [SCNSceneSource.LoadingOption : Any]? = nil) {
         self.init()
         do {
-            self.loader = try GLTFUnarchiver(data: data, animationManager: animationManager)
+            self.loader = try GLTFUnarchiver(data: data, withDirectoryPath: directoryPath, animationManager: animationManager)
         } catch {
             print("\(error.localizedDescription)")
         }
