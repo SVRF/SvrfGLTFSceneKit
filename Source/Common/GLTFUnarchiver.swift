@@ -69,11 +69,11 @@ public class GLTFUnarchiver {
     
     convenience public init(url: URL, extensions: [String:Codable.Type]? = nil) throws {
         let data = try Data(contentsOf: url)
-        try self.init(data: data, extensions: extensions)
-        self.directoryPath = url.deletingLastPathComponent()
+        try self.init(data: data, withDirectoryPath: url.deletingLastPathComponent(), extensions: extensions)
     }
     
-    public init(data: Data, animationManager: GLTFAnimationManager? = nil, extensions: [String:Codable.Type]? = nil) throws {
+    public init(data: Data, withDirectoryPath: URL? = nil, animationManager: GLTFAnimationManager? = nil, extensions: [String:Codable.Type]? = nil) throws {
+        self.directoryPath = withDirectoryPath
         let decoder = JSONDecoder()
         var _extensions = extensionList
         extensions?.forEach { (ext) in _extensions[ext.key] = ext.value }
