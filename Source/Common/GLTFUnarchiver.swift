@@ -1028,6 +1028,8 @@ public class GLTFUnarchiver {
         material.setValue(glMaterial.emissiveFactor[2], forKey: "emissiveFactorB")
         material.setValue(glMaterial.alphaCutoff, forKey: "alphaCutoff")
         
+        SvrfAnimatedMaterialExtension(material: material)
+        
         if let pbr = glMaterial.pbrMetallicRoughness {
             material.lightingModel = .physicallyBased
             material.diffuse.contents = createColor(pbr.baseColorFactor)
