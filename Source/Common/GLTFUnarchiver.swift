@@ -1028,8 +1028,6 @@ public class GLTFUnarchiver {
         material.setValue(glMaterial.emissiveFactor[2], forKey: "emissiveFactorB")
         material.setValue(glMaterial.alphaCutoff, forKey: "alphaCutoff")
         
-        SvrfAnimatedMaterialExtension(material: material)
-        
         if let pbr = glMaterial.pbrMetallicRoughness {
             material.lightingModel = .physicallyBased
             material.diffuse.contents = createColor(pbr.baseColorFactor)
@@ -1838,3 +1836,15 @@ extension GLTFUnarchiver: SvrfSceneOverlayLoader {
     }
 }
 
+
+extension GLTFUnarchiver: SvrfNodeAnimator {
+    func animateNode(_ model: NodeAnimationModel) throws {
+        let geometry = model.node?.geometry
+        let material = geometry?.firstMaterial?.copy() as! SCNMaterial
+        geometry?.firstMaterial = material
+        
+        if let images = try model.images?.map { try loadImage(index: $0).contents } {
+            material.animateWithImages(images: images as [Any], fps: model.fps)
+        }
+    }
+}

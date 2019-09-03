@@ -1,35 +1,36 @@
 //
-//  SvrfAnimatedMaterialExtension.swift
+//  SCNMaterial+ImageArray.swift
 //  GLTFSceneKit_macOS
 //
-//  Created by Roman Chaley on 8/29/19.
-//  Copyright © 2019 DarkHorse. All rights reserved.
+//  Created by Roman Chaley on 8/30/19.
 //
 
-import Foundation
 import SceneKit
 
-class SvrfAnimatedMaterialExtension {
+
+class AnimatedMaterial {
     let material: SCNMaterial
+    let images: [Any]
     
     var currentIndex = 0
-    var images: [UIImage] = []
     
-    init(material: SCNMaterial) {
+    init(material: SCNMaterial, images: [Any], fps: Int?) {
         self.material = material
-        
-        for i in 0 ... 50 {
-            let fileName = String(format: "art.scnassets/textures/LD4_%05d.jpg", i)
-            images.append(UIImage(named: fileName)!)
-        }
+        self.images = images
         
         let displayLink = CADisplayLink(target: self, selector: #selector(animationStep(_:)))
-        displayLink.preferredFramesPerSecond = 30
+        displayLink.preferredFramesPerSecond = fps ?? 10
         displayLink.add(to: .current, forMode: .default)
     }
     
     @objc func animationStep(_ displayLink: CADisplayLink) {
         material.diffuse.contents = images[currentIndex]
         currentIndex = (currentIndex + 1) % images.count
+    }
+}
+
+extension SCNMaterial {
+    public func animateWithImages(images: [Any], fps: Int?) {
+        let _ = AnimatedMaterial(material: self, images: images, fps: fps)
     }
 }
