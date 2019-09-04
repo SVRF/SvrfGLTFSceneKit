@@ -1253,6 +1253,7 @@ public class GLTFUnarchiver {
                 primitiveNode.morpher = morpher
             }
             
+            primitive.didLoad(by: primitiveNode, unarchiver: self)
             node.addChildNode(primitiveNode)
         }
         
@@ -1837,14 +1838,10 @@ extension GLTFUnarchiver: SvrfSceneOverlayLoader {
 }
 
 
-extension GLTFUnarchiver: SvrfNodeAnimator {
-    func animateNode(_ model: NodeAnimationModel) throws {
-        let geometry = model.node?.geometry
-        let material = geometry?.firstMaterial?.copy() as! SCNMaterial
-        geometry?.firstMaterial = material
-        
+extension GLTFUnarchiver: SvrfPrimitiveAnimator {
+    func animatePrimitive(_ model: PrimitiveAnimationModel) throws {
         if let images = try model.images?.map { try loadImage(index: $0).contents } {
-            material.animateWithImages(images: images as [Any], fps: model.fps)
+            model.material?.animateWithImages(images: images as [Any], fps: model.fps)
         }
     }
 }

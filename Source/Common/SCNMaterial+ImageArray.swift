@@ -9,6 +9,8 @@ import SceneKit
 
 
 class AnimatedMaterial {
+    let defaultFps = 10
+
     let material: SCNMaterial
     let images: [Any]
     
@@ -19,7 +21,7 @@ class AnimatedMaterial {
         self.images = images
         
         let displayLink = CADisplayLink(target: self, selector: #selector(animationStep(_:)))
-        displayLink.preferredFramesPerSecond = fps ?? 10
+        displayLink.preferredFramesPerSecond = fps ?? defaultFps
         displayLink.add(to: .current, forMode: .default)
     }
     

@@ -208,8 +208,8 @@ public class SceneOverlayModel {
 }
 
 // Provides information for animating node's material (provided by the SvrfAnimatedNodeExtension)
-public class NodeAnimationModel {
-    var node: SCNNode?
+public class PrimitiveAnimationModel {
+    var material: SCNMaterial?
     var images: [Int]?
     var fps: Int?
 }
