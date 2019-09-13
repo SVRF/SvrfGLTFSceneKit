@@ -1837,11 +1837,10 @@ extension GLTFUnarchiver: SvrfSceneOverlayLoader {
     }
 }
 
-
-extension GLTFUnarchiver: SvrfPrimitiveAnimator {
-    func animatePrimitive(_ model: PrimitiveAnimationModel) throws {
+extension GLTFUnarchiver: SvrfTextureAnimator {
+    func animateTexture(_ model: TextureAnimationModel) throws {
         if let images = try model.images?.map { try loadImage(index: $0).contents } {
-            model.material?.animateWithImages(images: images as [Any], fps: model.fps)
+            model.texture?.animateWithImages(images: images as [Any], fps: model.fps!)
         }
     }
 }

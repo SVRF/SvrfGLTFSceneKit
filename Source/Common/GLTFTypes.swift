@@ -207,9 +207,9 @@ public class SceneOverlayModel {
     var voffset: CGFloat?
 }
 
-// Provides information for animating node's material (provided by the SvrfAnimatedNodeExtension)
-public class PrimitiveAnimationModel {
-    var material: SCNMaterial?
+// Provides information for animating node's material (provided by the SvrfAnimatedMaterialExtension)
+public class TextureAnimationModel {
+    var texture: SCNMaterialProperty?
     var images: [Int]?
     var fps: Int?
 }
