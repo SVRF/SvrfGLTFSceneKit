@@ -23,7 +23,7 @@ struct SvrfAnimatedMaterialExtension: GLTFCodable {
         }
     }
 
-    struct SvrfAnimatedPrimitiveSchema: Codable {
+    struct SvrfAnimatedMaterialSchema: Codable {
         let baseColorTexture: SvrfAnimatedTextureSchema?
         let metallicRoughnessTexture: SvrfAnimatedTextureSchema?
         let normalTexture: SvrfAnimatedTextureSchema?
@@ -48,8 +48,8 @@ struct SvrfAnimatedMaterialExtension: GLTFCodable {
         case missingTexture
     }
     
-    let defaultFps = 10
-    let data: SvrfAnimatedPrimitiveSchema?
+    let defaultFps = 12
+    let data: SvrfAnimatedMaterialSchema?
 
     func didLoad(by object: Any, unarchiver: GLTFUnarchiver) {
         guard let material = object as? SCNMaterial else { return }
@@ -79,7 +79,6 @@ struct SvrfAnimatedMaterialExtension: GLTFCodable {
         } catch let error {
             print(error.localizedDescription)
         }
-        
     }
     
     func animateTexture(texture: SCNMaterialProperty?, schema: SvrfAnimatedTextureSchema, unarchiver: GLTFUnarchiver) throws {
