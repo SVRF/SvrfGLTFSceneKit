@@ -48,7 +48,7 @@ struct SvrfAnimatedMaterialExtension: GLTFCodable {
         case missingTexture
     }
     
-    let defaultFps = 12
+    let defaultFps = 10
     let data: SvrfAnimatedMaterialSchema?
 
     func didLoad(by object: Any, unarchiver: GLTFUnarchiver) {
