@@ -1253,6 +1253,7 @@ public class GLTFUnarchiver {
                 primitiveNode.morpher = morpher
             }
             
+            primitive.didLoad(by: primitiveNode, unarchiver: self)
             node.addChildNode(primitiveNode)
         }
         
@@ -1836,3 +1837,10 @@ extension GLTFUnarchiver: SvrfSceneOverlayLoader {
     }
 }
 
+extension GLTFUnarchiver: SvrfTextureAnimator {
+    func animateTexture(_ model: TextureAnimationModel) throws {
+        if let images = try model.images?.map { try loadImage(index: $0).contents } {
+            model.texture?.animateWithImages(images: images as [Any], fps: model.fps!)
+        }
+    }
+}

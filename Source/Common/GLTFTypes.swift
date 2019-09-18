@@ -198,11 +198,18 @@ extension GLTFPropertyProtocol {
     }
 }
 
-// Provides information for rendering the SKSceneOverlay (provided by the SVRFViewportBindingExtension)
+// Provides information for rendering the SKSceneOverlay (provided by the SvrfViewportBindingExtension)
 public class SceneOverlayModel {
     var images: [Int]?
     var halign: SvrfHorizontalAlignment?
     var valign: SvrfVerticalAlignment?
     var hoffset: CGFloat?
     var voffset: CGFloat?
+}
+
+// Provides information for animating node's material (provided by the SvrfAnimatedMaterialExtension)
+public class TextureAnimationModel {
+    var texture: SCNMaterialProperty?
+    var images: [Int]?
+    var fps: Int?
 }
