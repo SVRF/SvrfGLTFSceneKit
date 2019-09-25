@@ -21,7 +21,7 @@ class AnimatedTexture {
 
         displayLink = CADisplayLink(target: self, selector: #selector(animationStep(_:)))
         displayLink!.preferredFramesPerSecond = fps
-        displayLink!.add(to: .current, forMode: .default)
+        displayLink!.add(to: .main, forMode: .default)
     }
     
     @objc func animationStep(_ displayLink: CADisplayLink) {
@@ -30,7 +30,7 @@ class AnimatedTexture {
     }
     
     deinit {
-        displayLink!.remove(from: .current, forMode: .default)
+        displayLink!.invalidate()
     }
 }
 
