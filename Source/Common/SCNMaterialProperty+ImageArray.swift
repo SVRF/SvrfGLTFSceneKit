@@ -7,31 +7,37 @@
 
 import SceneKit
 
-
 class AnimatedTexture {
     let texture: SCNMaterialProperty
     let images: [Any]
-    
-    var displayLink: CADisplayLink?
-    var currentIndex = 0
+
+    // Todo: Add macOS support for animated textures
+    #if os(iOS)
+        var displayLink: CADisplayLink?
+        var currentIndex = 0
+    #endif
     
     init(texture: SCNMaterialProperty, images: [Any], fps: Int) {
         self.texture = texture
         self.images = images
 
-        displayLink = CADisplayLink(target: self, selector: #selector(animationStep(_:)))
-        displayLink!.preferredFramesPerSecond = fps
-        displayLink!.add(to: .main, forMode: .default)
+        #if os(iOS)
+            displayLink = CADisplayLink(target: self, selector: #selector(animationStep(_:)))
+            displayLink!.preferredFramesPerSecond = fps
+            displayLink!.add(to: .main, forMode: .default)
+        #endif
     }
-    
-    @objc func animationStep(_ displayLink: CADisplayLink) {
-        texture.contents = images[currentIndex]
-        currentIndex = (currentIndex + 1) % images.count
-    }
-    
-    deinit {
-        displayLink!.invalidate()
-    }
+
+    #if os(iOS)
+        @objc func animationStep(_ displayLink: CADisplayLink) {
+            texture.contents = images[currentIndex]
+            currentIndex = (currentIndex + 1) % images.count
+        }
+
+        deinit {
+            displayLink!.invalidate()
+        }
+    #endif
 }
 
 extension SCNMaterialProperty {
